@@ -1,9 +1,11 @@
-## Estrutura de dados
-Coisas da disciplina de Programação I (CI1001)
-- Tipos abstratos de Dados(TADS):
-
-Lista simples
-
-Lista duplamente encadeada
-
-Pilha
+## Estruturas de dados
+    ### - Pilha:
+      Arquivos:
+        - Header file: pilha.h
+        
+        - Source file: pilha.c
+        
+        - Source file: teste_pilha.c
+            * Arquivo p/ demonstrar o funcionamento de uma pilha.
+     
+      
