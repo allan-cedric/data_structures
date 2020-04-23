@@ -5,8 +5,8 @@
    GRR : 20190351
 */
 
-#ifndef __PILHA_H_
-#define __PILHA_H_
+#ifndef __PILHA_H__
+#define __PILHA_H__
 
 #include <stdio.h>
 
