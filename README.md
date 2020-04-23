@@ -1,6 +1,6 @@
 ## Estruturas de dados
-    ### - Pilha:
-      Arquivos:
+### Pilha:
+    Arquivos:
         - Header file: pilha.h
         
         - Source file: pilha.c
