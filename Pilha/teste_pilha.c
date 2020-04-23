@@ -1,3 +1,10 @@
+/* 
+   Source file : 'teste_pilha.c'
+   Escrito por : Allan Cedric G.B. Alves da Silva
+   Profile : Aluno de graduação do curso de Ciência da Computação (UFPR)
+   GRR : 20190351
+*/
+
 #include "pilha.h"
 #include <stdlib.h>
 #include <time.h>
