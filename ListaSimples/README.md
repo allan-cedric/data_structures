@@ -8,7 +8,7 @@
         
         - E um 'makefile'
             
-        *Arquivo p/ demonstrar o funcionamento de uma árvore binária.
+        *Arquivo p/ demonstrar o funcionamento de uma lista simples.
 ### Compilação:
     No terminal: make
 ### Como executar ?
