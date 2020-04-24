@@ -1,8 +1,13 @@
-/*
-  Feito por Marcos Castiho para a disciplina CI1001 - Programacao I
-  Em 18/10/2019.
-  Biblioteca auxiliar que manipula o TAD lista. 
+/* 
+  Header file : 'lista_dupla2.h'
+  Escrito por : Allan Cedric G.B. Alves da Silva
+  Profile : Aluno de graduação do curso de Ciência da Computação (UFPR)
+  GRR : 20190351
 */
+
+#ifndef __LISTA_DUPLA2_H__
+#define __LISTA_DUPLA2_H__
+
 #define MAX 5
 
 /*
@@ -36,3 +41,5 @@ int ordena_lista(t_lista *l);
   Retorna 1 se a operação foi bem sucedida e zero caso contrário.
 */
 int intercala_listas(t_lista *l, t_lista *m, t_lista *i);
+
+#endif

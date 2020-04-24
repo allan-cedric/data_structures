@@ -1,25 +1,30 @@
-/*
-  Feito por Marcos Castiho para a disciplina CI1001 - Programacao I
-  Em 18/10/2019.
-  Define a estrutura de dados para o Tipo Abstrato de Dados Lista
-  como sendo uma lista duplamente encadeada com sentinelas no inicio
-  e no final. A cabeca da lista tem ponteiros para o inicio, fim e
-  para um elemento qualquer da lista, alem do tamanho da lista.
-  Contem os prototipos publicos das funcoes que manipulam o TAD.
+/* 
+  Header file : 'lista_dupla.h'
+  Escrito por : Allan Cedric G.B. Alves da Silva
+  Profile : Aluno de graduação do curso de Ciência da Computação (UFPR)
+  GRR : 20190351
 */
 
-struct t_nodo {
-    int chave;
-    struct t_nodo *prox;
-    struct t_nodo *prev;
+#ifndef __LISTA_DUPLA_H__
+#define __LISTA_DUPLA_H__
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct t_nodo
+{
+  int chave;
+  struct t_nodo *prox;
+  struct t_nodo *prev;
 };
 typedef struct t_nodo t_nodo;
 
-struct t_lista {
-    t_nodo *ini;
-    t_nodo *atual;
-    t_nodo *fim;
-    int tamanho;
+struct t_lista
+{
+  t_nodo *ini;
+  t_nodo *atual;
+  t_nodo *fim;
+  int tamanho;
 };
 typedef struct t_lista t_lista;
 
@@ -132,3 +137,5 @@ int consulta_item_atual(int *item, t_lista *atual);
   Retorna 1 se houve sucesso e zero caso contrário.
 */
 int remove_item_atual(int *item, t_lista *l);
+
+#endif

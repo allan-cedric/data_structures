@@ -1,5 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
+/* 
+  Source file : 'lista_dupla2.c'
+  Escrito por : Allan Cedric G.B. Alves da Silva
+  Profile : Aluno de graduação do curso de Ciência da Computação (UFPR)
+  GRR : 20190351
+*/
+
 #include "lista_dupla.h"
 #include "lista_dupla2.h"
 
