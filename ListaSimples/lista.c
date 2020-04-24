@@ -82,10 +82,7 @@ int insere_fim_lista(int x, t_lista *l)
 
 int insere_ordenado_lista(int x, t_lista *l)
 {
-	if (lista_vazia(l))
-		return (insere_inicio_lista(x, l));
-
-	if (x < l->ini->chave)
+	if (lista_vazia(l) || x < l->ini->chave)
 		return (insere_inicio_lista(x, l));
 
 	t_nodo *ant, *p;
@@ -107,10 +104,12 @@ int insere_ordenado_lista(int x, t_lista *l)
 	if (!elemento)
 		return 0;
 
+	elemento->chave = x;
 	ant->prox = elemento;
 	elemento->prox = p;
 
-	(l->tamanho)++;
+	l->tamanho++;
+
 	return 1;
 }
 
