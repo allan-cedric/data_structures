@@ -2,5 +2,5 @@
 
     - Pilha
     - Lista simples
-    * Lista duplamente encadeada
-    * Árvore Binária de Busca
+    - Lista duplamente encadeada
+    - Árvore Binária de Busca
