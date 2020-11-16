@@ -15,6 +15,7 @@ int arvore_vazia(arvore_t *a)
 int inicializa_arvore(arvore_t *a)
 {
 	a->raiz = NULL;
+	a->tam = 0;
 	return 1;
 }
 
@@ -23,7 +24,7 @@ int inicializa_raiz(arvore_t *a, int chave)
 	if (!arvore_vazia(a))
 	{
 		perror("Essa árvore já possui um NODO RAIZ!");
-		exit(1);
+		return 0;
 	}
 
 	a->raiz = malloc(sizeof(nodo_t));
@@ -34,6 +35,7 @@ int inicializa_raiz(arvore_t *a, int chave)
 		exit(1);
 	}
 
+	a->tam++;
 	a->raiz->chave = chave;
 	a->raiz->pai = NULL;
 	a->raiz->esq = NULL;
@@ -55,6 +57,7 @@ int insere_nodo(arvore_t *a, int chave)
 		exit(1);
 	}
 
+	a->tam++;
 	novo->chave = chave;
 	novo->esq = NULL;
 	novo->dir = NULL;
@@ -62,7 +65,6 @@ int insere_nodo(arvore_t *a, int chave)
 	nodo_t *aux = a->raiz;
 	nodo_t *ant = NULL;
 
-	/* Inserção de um novo nodo como folha */
 	while (aux != NULL)
 	{
 		ant = aux;
@@ -81,48 +83,47 @@ int insere_nodo(arvore_t *a, int chave)
 	return 1;
 }
 
-void imprime_arvore(nodo_t *n, int i)
+void imprime_arvore(nodo_t *n, const char *opcao)
 {
 	if (!n)
 		return;
 
 	/* PRE-ORDER */
-	if (i == 1)
+	if (!strcmp(opcao, "pre"))
 	{
 		printf("%i ", n->chave);
-		imprime_arvore(n->esq, 1);
-		imprime_arvore(n->dir, 1);
+		imprime_arvore(n->esq, "pre");
+		imprime_arvore(n->dir, "pre");
 	}
 	/* IN-ORDER */
-	else if (i == 2)
+	else if (!strcmp(opcao, "in"))
 	{
-		imprime_arvore(n->esq, 2);
+		imprime_arvore(n->esq, "in");
 		printf("%i ", n->chave);
-		imprime_arvore(n->dir, 2);
+		imprime_arvore(n->dir, "in");
 	}
 	/* POS-ORDER */
-	else if (i == 3)
+	else if (!strcmp(opcao, "pos"))
 	{
-		imprime_arvore(n->esq, 3);
-		imprime_arvore(n->dir, 3);
+		imprime_arvore(n->esq, "pos");
+		imprime_arvore(n->dir, "pos");
 		printf("%i ", n->chave);
 	}
 	else
-	{
-		printf("Valor inválido do segundo argumento\n");
-		return;
-	}
+		perror("Valor inválido do segundo argumento!");
 }
 
-void destroi_arvore(nodo_t *n)
+void destroi_arvore(arvore_t *a, nodo_t *n)
 {
-	if (!n)
+	if (!n || arvore_vazia(a))
 		return;
 
+	a->tam--;
 	/* POS-ORDER */
-	destroi_arvore(n->esq);
-	destroi_arvore(n->dir);
+	destroi_arvore(a, n->esq);
+	destroi_arvore(a, n->dir);
 	free(n);
+	n = NULL;
 }
 
 void *busca(nodo_t *n, int chave)
@@ -137,6 +138,8 @@ void *busca(nodo_t *n, int chave)
 
 void *minimo(nodo_t *n)
 {
+	if (!n)
+		return n;
 	while (n->esq)
 		n = n->esq;
 	return n;
@@ -144,6 +147,8 @@ void *minimo(nodo_t *n)
 
 void *maximo(nodo_t *n)
 {
+	if (!n)
+		return n;
 	while (n->dir)
 		n = n->dir;
 	return n;

@@ -10,9 +10,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /* 
-  Estrutura de dado de um nodo
+  Estrutura de dado de um nodo com chave simples => int
 */
 struct nodo_t
 {
@@ -30,6 +31,7 @@ typedef struct nodo_t nodo_t;
 struct arvore_t
 {
   struct nodo_t *raiz;
+  int tam;
 };
 typedef struct arvore_t arvore_t;
 
@@ -54,14 +56,14 @@ int inicializa_raiz(arvore_t *a, int chave);
 int insere_nodo(arvore_t *a, int chave);
 
 /*
-  Imprime árvore para 3 opções: 'pre-order'= 1, 'in-order'= 2 ou 'pos-order'= 3
+  Imprime árvore para 3 opções: "pre", "in" ou "pos"
 */
-void imprime_arvore(nodo_t *n, int i);
+void imprime_arvore(nodo_t *n, const char *opcao);
 
 /*
   Desaloca a memória da árvore
 */
-void destroi_arvore(nodo_t *n);
+void destroi_arvore(arvore_t *a, nodo_t *n);
 
 /*
   Busca em uma árvore binária, retorna um ponteiro para o nodo buscado
