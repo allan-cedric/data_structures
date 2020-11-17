@@ -1,4 +1,4 @@
-## Árvore Binária simples:
+## Árvore Binária de Busca simples:
     Arquivos:
         - Header file: arvore_binaria.h
         
