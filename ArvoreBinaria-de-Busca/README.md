@@ -1,15 +1,26 @@
-## Árvore Binária de Busca simples:
-    Arquivos:
-        - Header file: arvore_binaria.h
+## Árvore Binária de Busca:
+### Arquivos:
+    - Header file: bst.h
         
-        - Source file: arvore_binaria.c
+    - Source file: bst.c
         
-        - *Source file: teste_arvore.c
+    - *Source file: teste_bst.c
         
-        - E um 'makefile'
+    - E um 'makefile'
             
-        *Arquivo p/ demonstrar o funcionamento de uma árvore binária.
+    *Arquivo p/ demonstrar o funcionamento de uma árvore binária de busca.
+### Operações fundamentais:
+    - Inserção
+    - Busca
+    - Mínimo
+    - Máximo
+    - Destruição
+    - Impressão (inOrder, preOrder, posOrder)
+    - E muito mais...
+
+    *VOU COLOCAR AINDA REMOÇÃO
+    
 ### Compilação:
     No terminal: make
 ### Como executar ?
-    No terminal: ./teste_arvore
+    No terminal: ./teste_bst

@@ -1,18 +1,18 @@
 CC=gcc
 CFLAGS=-ansi -Wall
-OBJ=arvore_binaria.o teste_arvore.o
-EXEC=teste_arvore
+OBJ=bst.o teste_bst.o
+EXEC=teste_bst
 
-all: teste_arvore clean
+all: teste_bst clean
 
-teste_arvore: $(OBJ)
+teste_bst: $(OBJ)
 	$(CC) $(OBJ) -o $(EXEC) $(CFLAGS)
 
-arvore_binaria.o: arvore_binaria.h arvore_binaria.c
-	$(CC) -c arvore_binaria.c $(CFLAGS)
+bst.o: bst.h bst.c
+	$(CC) -c bst.c $(CFLAGS)
 
-teste_arvore.o: arvore_binaria.h arvore_binaria.c
-	$(CC) -c teste_arvore.c $(CFLAGS)
+teste_bst.o: bst.h bst.c
+	$(CC) -c teste_bst.c $(CFLAGS)
 
 clean:
 	-rm -f $(OBJ) *~
