@@ -1,4 +1,4 @@
-## Árvore Binária de Busca:
+## Árvore Binária de Busca (BST):
 ### Arquivos:
     - Header file: bst.h
         
