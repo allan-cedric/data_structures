@@ -31,10 +31,10 @@ typedef struct BST
   struct node_t *root;
 } BST;
 
-/* Avalia se a árvore está vazia(1) ou não(0) */
+/* Avalia se a BST está vazia(1) ou não(0) */
 int emptyBST(BST *bst);
 
-/* Cria a árvore */
+/* Cria a BST */
 int createBST(BST *bst);
 
 /* Cria um nodo raiz */
