@@ -9,16 +9,15 @@
     - E um 'makefile'
             
     *Arquivo p/ demonstrar o funcionamento de uma árvore binária de busca.
-### Operações fundamentais:
+### Operações fundamentais completas :) :
     - Inserção
+    - Remoção
     - Busca
     - Mínimo
     - Máximo
     - Destruição
     - Impressão (inOrder, preOrder, posOrder)
     - E muito mais...
-
-    *VOU COLOCAR AINDA REMOÇÃO
     
 ### Compilação:
     No terminal: make
