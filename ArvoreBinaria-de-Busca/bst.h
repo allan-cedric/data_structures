@@ -68,6 +68,6 @@ int heightBST(node_t *node);
 int removeNodeBST(BST *bst, int value);
 
 /* Redireciona uma sub-árvore como filho de um novo nodo */
-int transplantSubtreeBST(node_t *node, node_t *nodeChild);
+int transplantSubtreeBST(BST *bst, node_t *node, node_t *nodeChild);
 
 #endif

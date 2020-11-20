@@ -173,30 +173,33 @@ int removeNodeBST(BST *bst, int value)
 	if (!nodeToRemove)
 		return 0;
 	if (!nodeToRemove->left)
-	{
-		transplantSubtreeBST(nodeToRemove, nodeToRemove->right);
-		free(nodeToRemove);
-	}
+		transplantSubtreeBST(bst, nodeToRemove, nodeToRemove->right);
 	else if (!nodeToRemove->right)
-	{
-		transplantSubtreeBST(nodeToRemove, nodeToRemove->left);
-		free(nodeToRemove);
-	}
+		transplantSubtreeBST(bst, nodeToRemove, nodeToRemove->left);
 	else
 	{
 		node_t *nodeSucessor = minValueBST(nodeToRemove->right);
-		nodeToRemove->value = nodeSucessor->value;
-		transplantSubtreeBST(nodeSucessor, nodeSucessor->right);
-		free(nodeSucessor);
-		nodeSucessor = NULL;
+
+		if (nodeSucessor->parent != nodeToRemove)
+		{
+			transplantSubtreeBST(bst, nodeSucessor, nodeSucessor->right);
+			nodeSucessor->right = nodeToRemove->right;
+			nodeSucessor->right->parent = nodeSucessor;
+		}
+		transplantSubtreeBST(bst, nodeToRemove, nodeSucessor);
+		nodeSucessor->left = nodeToRemove->left;
+		nodeSucessor->left->parent = nodeSucessor;
 	}
+	free(nodeToRemove);
 	nodeToRemove = NULL;
 	return 1;
 }
 
-int transplantSubtreeBST(node_t *node, node_t *nodeChild)
+int transplantSubtreeBST(BST *bst, node_t *node, node_t *nodeChild)
 {
-	if (node->value < node->parent->value)
+	if (!node->parent)
+		bst->root = nodeChild;
+	else if (node == node->parent->left)
 		node->parent->left = nodeChild;
 	else
 		node->parent->right = nodeChild;
