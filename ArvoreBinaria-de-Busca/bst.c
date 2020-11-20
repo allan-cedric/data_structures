@@ -166,3 +166,41 @@ int heightBST(node_t *node)
 		return heightRight + 1;
 	return heightLeft + 1;
 }
+
+int removeNodeBST(BST *bst, int value)
+{
+	node_t *nodeToRemove = searchBST(bst->root, value);
+	if (!nodeToRemove)
+		return 0;
+	if (!nodeToRemove->left)
+	{
+		transplantSubtreeBST(nodeToRemove, nodeToRemove->right);
+		free(nodeToRemove);
+	}
+	else if (!nodeToRemove->right)
+	{
+		transplantSubtreeBST(nodeToRemove, nodeToRemove->left);
+		free(nodeToRemove);
+	}
+	else
+	{
+		node_t *nodeSucessor = minValueBST(nodeToRemove->right);
+		nodeToRemove->value = nodeSucessor->value;
+		transplantSubtreeBST(nodeSucessor, nodeSucessor->right);
+		free(nodeSucessor);
+		nodeSucessor = NULL;
+	}
+	nodeToRemove = NULL;
+	return 1;
+}
+
+int transplantSubtreeBST(node_t *node, node_t *nodeChild)
+{
+	if (node->value < node->parent->value)
+		node->parent->left = nodeChild;
+	else
+		node->parent->right = nodeChild;
+	if (nodeChild)
+		nodeChild->parent = node->parent;
+	return 1;
+}

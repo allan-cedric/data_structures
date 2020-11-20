@@ -85,10 +85,32 @@ int main()
 	else
 		printf("Valor NÃO encontrado\n");
 
+	printf("\n\nRemovendo o valor 5...");
+	removeNodeBST(&genericBst, 5);
+	printf("\npreOrder: ");
+	printBST(genericBst.root, "pre");
+
+	printf("\ninOrder: ");
+	printBST(genericBst.root, "in");
+
+	printf("\nposOrder: ");
+	printBST(genericBst.root, "pos");
+
+	printf("\n\nRemovendo o valor 8...");
+	removeNodeBST(&genericBst, 8);
+	printf("\npreOrder: ");
+	printBST(genericBst.root, "pre");
+
+	printf("\ninOrder: ");
+	printBST(genericBst.root, "in");
+
+	printf("\nposOrder: ");
+	printBST(genericBst.root, "pos");
+
 	genericNode = NULL;
 
 	/* Desalocação de memória da BST */
-	printf("\nDestruindo BST...");
+	printf("\n\nDestruindo BST...");
 	destroyBST(&genericBst, genericBst.root);
 	printf("\nBST destruída com sucesso\n\n");
 

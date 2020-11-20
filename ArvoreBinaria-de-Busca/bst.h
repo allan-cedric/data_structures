@@ -64,4 +64,10 @@ int numNodesBST(node_t *node);
 /* Retorna a altura (nível máximo) da BST */
 int heightBST(node_t *node);
 
+/* Remove um nodo da BST */
+int removeNodeBST(BST *bst, int value);
+
+/* Redireciona uma sub-árvore como filho de um novo nodo */
+int transplantSubtreeBST(node_t *node, node_t *nodeChild);
+
 #endif
