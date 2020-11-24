@@ -13,7 +13,7 @@
 #include <string.h>
 
 /* 
-  Estrutura de dado de um nodo com valor simples => int
+  Estrutura de dado de um nodo (p/ BST) com valor simples => int
 */
 typedef struct node_t
 {
@@ -21,53 +21,45 @@ typedef struct node_t
   struct node_t *right;
   struct node_t *parent;
   int value;
-} node_t;
-
-/*
-  Estrutura de dados da BST
-*/
-typedef struct BST
-{
-  struct node_t *root;
 } BST;
 
 /* Avalia se a BST está vazia(1) ou não(0) */
-int emptyBST(BST *bst);
+int emptyBST(BST *root);
 
 /* Cria a BST */
-int createBST(BST *bst);
+BST *createBST();
 
-/* Cria um nodo raiz */
-int insertRootBST(BST *bst, int value);
+/* Cria um novo nodo */
+BST *newNode(int value);
 
 /* Insere um novo nodo */
-int insertNodeBST(BST *bst, int value);
+BST *insertNodeBST(BST *root, int value);
 
 /* Imprime BST com 3 opções possíveis: "pre", "in" ou "pos" */
-void printBST(node_t *node, const char *op);
+void printBST(BST *root, const char *op);
 
 /* Destrói a BST */
-void destroyBST(BST *bst, node_t *node);
+BST *destroyBST(BST *root);
 
 /* Busca na BST. Retorna um ponteiro para o nodo buscado, caso contrário NULL */
-node_t *searchBST(node_t *node, int value);
+BST *searchBST(BST *node, int value);
 
 /* Retorna um ponteiro para o nodo que contém a MENOR valor */
-node_t *minValueBST(node_t *node);
+BST *minValueBST(BST *node);
 
 /* Retorna um ponteiro para o nodo que contém a MAIOR valor */
-node_t *maxValueBST(node_t *node);
+BST *maxValueBST(BST *node);
 
 /* Retorna o número de nodos da BST */
-int numNodesBST(node_t *node);
+int numNodesBST(BST *node);
 
 /* Retorna a altura (nível máximo) da BST */
-int heightBST(node_t *node);
+int heightBST(BST *node);
 
 /* Remove um nodo da BST */
-int removeNodeBST(BST *bst, int value);
+BST *removeNodeBST(BST *root, int value);
 
 /* Redireciona uma sub-árvore como filho de um novo nodo */
-int transplantSubtreeBST(BST *bst, node_t *node, node_t *nodeChild);
+BST *transplantSubtreeBST(BST *root, BST *node, BST *nodeChild);
 
 #endif

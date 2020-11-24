@@ -9,110 +9,103 @@
 
 int main()
 {
-	BST genericBst;
-	node_t *genericNode;
-
 	/* Inicialização da BST */
 	printf("\nInicializando uma BST...\n");
-	if (createBST(&genericBst))
-		printf("BST inicializada com sucesso!\n");
-	else
-	{
-		perror("Erro ao inicializar a BST! - 'createBST()'");
-		exit(1);
-	}
+	BST *rootBst = createBST();
 
 	/* Criação do nodo raiz e preenchimento da BST */
-	if (emptyBST(&genericBst))
+	if (emptyBST(rootBst))
 	{
 		printf("\nBST está vazia!\n");
+		rootBst = insertNodeBST(rootBst, 5);
 		printf("Criando nodo raiz com valor 5...\n");
-		if (insertRootBST(&genericBst, 5))
-			printf("Nodo raiz criado com sucesso!\n");
-		else
-		{
-			perror("Erro ao criar o nodo raiz! - 'insertRootBST()'");
-			exit(1);
-		}
+		printf("Nodo raiz criado com sucesso!\n\n");
 
 		printf("Inserindo nodo com valor 1...\n");
-		insertNodeBST(&genericBst, 1);
+		rootBst = insertNodeBST(rootBst, 1);
 		printf("Inserindo nodo com valor 9...\n");
-		insertNodeBST(&genericBst, 9);
+		rootBst = insertNodeBST(rootBst, 9);
 		printf("Inserindo nodo com valor 10...\n");
-		insertNodeBST(&genericBst, 10);
+		rootBst = insertNodeBST(rootBst, 10);
 		printf("Inserindo nodo com valor 0...\n");
-		insertNodeBST(&genericBst, 0);
+		rootBst = insertNodeBST(rootBst, 0);
 		printf("Inserindo nodo com valor 4...\n");
-		insertNodeBST(&genericBst, 4);
+		rootBst = insertNodeBST(rootBst, 4);
 		printf("Inserindo nodo com valor 8...\n");
-		insertNodeBST(&genericBst, 8);
+		rootBst = insertNodeBST(rootBst, 8);
 	}
 
-	/* Impressão de todos os tipos */
+	/* Impressão da BST em cada formato */
 	printf("\nImprimindo BST...\n");
 	printf("preOrder: ");
-	printBST(genericBst.root, "pre");
+	printBST(rootBst, "pre");
 
 	printf("\ninOrder: ");
-	printBST(genericBst.root, "in");
+	printBST(rootBst, "in");
 
 	printf("\nposOrder: ");
-	printBST(genericBst.root, "pos");
+	printBST(rootBst, "pos");
 
 	/* Número de nodos da BST e sua altura*/
-	printf("\n\nNúmero de nodos da BST: %i\n", numNodesBST(genericBst.root));
-	printf("Altura da BST: %i", heightBST(genericBst.root));
+	printf("\n\nNúmero de nodos da BST: %i\n", numNodesBST(rootBst));
+	printf("Altura da BST: %i", heightBST(rootBst));
 
 	/* Elementos extremos: máximo e mínimo */
-	genericNode = maxValueBST(genericBst.root);
-	printf("\n\nMaior valor: %i", genericNode->value);
-	genericNode = minValueBST(genericBst.root);
-	printf("\nMenor valor: %i\n", genericNode->value);
+	BST *genericNodeBst;
+	genericNodeBst = maxValueBST(rootBst);
+	printf("\n\nMaior valor: %i", genericNodeBst->value);
+	genericNodeBst = minValueBST(rootBst);
+	printf("\nMenor valor: %i\n", genericNodeBst->value);
 
 	/* Teste de busca de elementos na BST */
 	printf("\nBuscando o valor 4...\n");
-	genericNode = searchBST(genericBst.root, 4);
-	if (genericNode)
-		printf("Valor ENCONTRADO: %i\n", genericNode->value);
+	genericNodeBst = searchBST(rootBst, 4);
+	if (genericNodeBst)
+		printf("Valor ENCONTRADO: %i\n", genericNodeBst->value);
 	else
 		printf("Valor NÃO encontrado\n");
 
 	printf("\nBuscando o valor 12...\n");
-	genericNode = searchBST(genericBst.root, 12);
-	if (genericNode)
-		printf("Valor ENCONTRADO: %i\n", genericNode->value);
+	genericNodeBst = searchBST(rootBst, 12);
+	if (genericNodeBst)
+		printf("Valor ENCONTRADO: %i\n", genericNodeBst->value);
 	else
 		printf("Valor NÃO encontrado\n");
 
 	printf("\n\nRemovendo o valor 5...");
-	removeNodeBST(&genericBst, 5);
+	rootBst = removeNodeBST(rootBst, 5);
 	printf("\npreOrder: ");
-	printBST(genericBst.root, "pre");
+	printBST(rootBst, "pre");
 
 	printf("\ninOrder: ");
-	printBST(genericBst.root, "in");
+	printBST(rootBst, "in");
 
 	printf("\nposOrder: ");
-	printBST(genericBst.root, "pos");
+	printBST(rootBst, "pos");
 
 	printf("\n\nRemovendo o valor 8...");
-	removeNodeBST(&genericBst, 8);
+	rootBst = removeNodeBST(rootBst, 8);
 	printf("\npreOrder: ");
-	printBST(genericBst.root, "pre");
+	printBST(rootBst, "pre");
 
 	printf("\ninOrder: ");
-	printBST(genericBst.root, "in");
+	printBST(rootBst, "in");
 
 	printf("\nposOrder: ");
-	printBST(genericBst.root, "pos");
+	printBST(rootBst, "pos");
 
-	genericNode = NULL;
+	genericNodeBst = NULL;
 
 	/* Desalocação de memória da BST */
-	printf("\n\nDestruindo BST...");
-	destroyBST(&genericBst, genericBst.root);
-	printf("\nBST destruída com sucesso\n\n");
+	printf("\n\nDestruindo BST...\n");
+	rootBst = destroyBST(rootBst);
+	if (emptyBST(rootBst))
+		printf("BST destruída com sucesso\n\n");
+	else
+	{
+		perror("BST NÃO foi destruída com sucesso");
+		exit(1);
+	}
 
 	return 0;
 }
