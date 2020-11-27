@@ -17,7 +17,7 @@ BST *createBST()
 	return NULL;
 }
 
-BST *newNode(int value)
+BST *newNode(int key)
 {
 	BST *node = malloc(sizeof(BST));
 	if (!node)
@@ -28,22 +28,22 @@ BST *newNode(int value)
 	node->left = NULL;
 	node->right = NULL;
 	node->parent = NULL;
-	node->value = value;
+	node->key = key;
 	return node;
 }
 
-BST *insertNodeBST(BST *root, int value)
+BST *insertNodeBST(BST *root, int key)
 {
 	if (!root)
-		return newNode(value);
-	if (value < root->value)
+		return newNode(key);
+	if (key < root->key)
 	{
-		root->left = insertNodeBST(root->left, value);
+		root->left = insertNodeBST(root->left, key);
 		root->left->parent = root;
 	}
 	else
 	{
-		root->right = insertNodeBST(root->right, value);
+		root->right = insertNodeBST(root->right, key);
 		root->right->parent = root;
 	}
 	return root;
@@ -57,7 +57,7 @@ void printBST(BST *root, const char *op)
 	/* PRE-ORDER */
 	if (!strcmp(op, "pre"))
 	{
-		printf("%i ", root->value);
+		printf("%i ", root->key);
 		printBST(root->left, "pre");
 		printBST(root->right, "pre");
 	}
@@ -65,7 +65,7 @@ void printBST(BST *root, const char *op)
 	else if (!strcmp(op, "in"))
 	{
 		printBST(root->left, "in");
-		printf("%i ", root->value);
+		printf("%i ", root->key);
 		printBST(root->right, "in");
 	}
 	/* POS-ORDER */
@@ -73,7 +73,7 @@ void printBST(BST *root, const char *op)
 	{
 		printBST(root->left, "pos");
 		printBST(root->right, "pos");
-		printf("%i ", root->value);
+		printf("%i ", root->key);
 	}
 	else
 		perror("Not a valid argument for 'op' - 'printBST()'");
@@ -91,28 +91,28 @@ BST *destroyBST(BST *root)
 	return root;
 }
 
-BST *searchBST(BST *root, int value)
+BST *searchBST(BST *root, int key)
 {
-	if (!root || root->value == value)
+	if (!root || root->key == key)
 		return root;
 
-	if (value >= root->value)
-		return (searchBST(root->right, value));
-	return (searchBST(root->left, value));
+	if (key >= root->key)
+		return (searchBST(root->right, key));
+	return (searchBST(root->left, key));
 }
 
-BST *minValueBST(BST *root)
+BST *minKeyBST(BST *root)
 {
 	if (!root || !root->left)
 		return root;
-	return minValueBST(root->left);
+	return minKeyBST(root->left);
 }
 
-BST *maxValueBST(BST *root)
+BST *maxKeyBST(BST *root)
 {
 	if (!root || !root->right)
 		return root;
-	return maxValueBST(root->right);
+	return maxKeyBST(root->right);
 }
 
 int numNodesBST(BST *root)
@@ -133,9 +133,9 @@ int heightBST(BST *root)
 	return heightLeft + 1;
 }
 
-BST *removeNodeBST(BST *root, int value)
+BST *removeNodeBST(BST *root, int key)
 {
-	BST *nodeToRemove = searchBST(root, value);
+	BST *nodeToRemove = searchBST(root, key);
 	if (!nodeToRemove)
 		return root;
 	if (!nodeToRemove->left)
@@ -144,7 +144,7 @@ BST *removeNodeBST(BST *root, int value)
 		root = transplantSubtreeBST(root, nodeToRemove, nodeToRemove->left);
 	else
 	{
-		BST *nodeSucessor = minValueBST(nodeToRemove->right);
+		BST *nodeSucessor = minKeyBST(nodeToRemove->right);
 
 		if (nodeSucessor->parent != nodeToRemove)
 		{

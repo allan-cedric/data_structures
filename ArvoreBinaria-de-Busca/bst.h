@@ -20,7 +20,7 @@ typedef struct node_t
   struct node_t *left;
   struct node_t *right;
   struct node_t *parent;
-  int value;
+  int key;
 } BST;
 
 /* Avalia se a BST está vazia(1) ou não(0) */
@@ -30,10 +30,10 @@ int emptyBST(BST *root);
 BST *createBST();
 
 /* Cria um novo nodo */
-BST *newNode(int value);
+BST *newNode(int key);
 
 /* Insere um novo nodo */
-BST *insertNodeBST(BST *root, int value);
+BST *insertNodeBST(BST *root, int key);
 
 /* Imprime BST com 3 opções possíveis: "pre", "in" ou "pos" */
 void printBST(BST *root, const char *op);
@@ -42,13 +42,13 @@ void printBST(BST *root, const char *op);
 BST *destroyBST(BST *root);
 
 /* Busca na BST. Retorna um ponteiro para o nodo buscado, caso contrário NULL */
-BST *searchBST(BST *node, int value);
+BST *searchBST(BST *node, int key);
 
 /* Retorna um ponteiro para o nodo que contém a MENOR valor */
-BST *minValueBST(BST *node);
+BST *minKeyBST(BST *node);
 
 /* Retorna um ponteiro para o nodo que contém a MAIOR valor */
-BST *maxValueBST(BST *node);
+BST *maxKeyBST(BST *node);
 
 /* Retorna o número de nodos da BST */
 int numNodesBST(BST *node);
@@ -57,7 +57,7 @@ int numNodesBST(BST *node);
 int heightBST(BST *node);
 
 /* Remove um nodo da BST */
-BST *removeNodeBST(BST *root, int value);
+BST *removeNodeBST(BST *root, int key);
 
 /* Redireciona uma sub-árvore como filho de um novo nodo */
 BST *transplantSubtreeBST(BST *root, BST *node, BST *nodeChild);

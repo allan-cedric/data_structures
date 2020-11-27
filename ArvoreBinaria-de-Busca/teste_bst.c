@@ -52,23 +52,23 @@ int main()
 
 	/* Elementos extremos: máximo e mínimo */
 	BST *genericNodeBst;
-	genericNodeBst = maxValueBST(rootBst);
-	printf("\n\nMaior valor: %i", genericNodeBst->value);
-	genericNodeBst = minValueBST(rootBst);
-	printf("\nMenor valor: %i\n", genericNodeBst->value);
+	genericNodeBst = maxKeyBST(rootBst);
+	printf("\n\nMaior valor: %i", genericNodeBst->key);
+	genericNodeBst = minKeyBST(rootBst);
+	printf("\nMenor valor: %i\n", genericNodeBst->key);
 
 	/* Teste de busca de elementos na BST */
 	printf("\nBuscando o valor 4...\n");
 	genericNodeBst = searchBST(rootBst, 4);
 	if (genericNodeBst)
-		printf("Valor ENCONTRADO: %i\n", genericNodeBst->value);
+		printf("Valor ENCONTRADO: %i\n", genericNodeBst->key);
 	else
 		printf("Valor NÃO encontrado\n");
 
 	printf("\nBuscando o valor 12...\n");
 	genericNodeBst = searchBST(rootBst, 12);
 	if (genericNodeBst)
-		printf("Valor ENCONTRADO: %i\n", genericNodeBst->value);
+		printf("Valor ENCONTRADO: %i\n", genericNodeBst->key);
 	else
 		printf("Valor NÃO encontrado\n");
 
