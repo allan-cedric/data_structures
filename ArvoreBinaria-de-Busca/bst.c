@@ -41,7 +41,7 @@ BST *insertNodeBST(BST *root, int key)
 		root->left = insertNodeBST(root->left, key);
 		root->left->parent = root;
 	}
-	else
+	else if (key > root->key)
 	{
 		root->right = insertNodeBST(root->right, key);
 		root->right->parent = root;
@@ -96,7 +96,7 @@ BST *searchBST(BST *root, int key)
 	if (!root || root->key == key)
 		return root;
 
-	if (key >= root->key)
+	if (key > root->key)
 		return (searchBST(root->right, key));
 	return (searchBST(root->left, key));
 }
@@ -125,7 +125,7 @@ int numNodesBST(BST *root)
 int heightBST(BST *root)
 {
 	if (!root)
-		return 0;
+		return -1;
 	int heightLeft = heightBST(root->left);
 	int heightRight = heightBST(root->right);
 	if (heightRight > heightLeft)
