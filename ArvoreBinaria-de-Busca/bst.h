@@ -13,7 +13,7 @@
 #include <string.h>
 
 /* 
-  Estrutura de dado de um nodo (p/ BST) com valor simples => int
+  Estrutura de dado de um nodo (p/ BST) com chave simples => int
 */
 typedef struct node_t
 {
@@ -44,10 +44,10 @@ BST *destroyBST(BST *root);
 /* Busca na BST. Retorna um ponteiro para o nodo buscado, caso contrário NULL */
 BST *searchBST(BST *node, int key);
 
-/* Retorna um ponteiro para o nodo que contém a MENOR valor */
+/* Retorna um ponteiro para o nodo que contém a MENOR chave */
 BST *minKeyBST(BST *node);
 
-/* Retorna um ponteiro para o nodo que contém a MAIOR valor */
+/* Retorna um ponteiro para o nodo que contém a MAIOR chave */
 BST *maxKeyBST(BST *node);
 
 /* Retorna o número de nodos da BST */
