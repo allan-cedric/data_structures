@@ -13,7 +13,7 @@
 #include <string.h>
 
 /* 
-  Estrutura de dado de um nodo (p/ AVL) com valor simples => int
+  Estrutura de dado de um nodo (p/ AVL) com chave simples => int
 */
 typedef struct node_t
 {
@@ -45,10 +45,10 @@ AVL *destroyAVL(AVL *root);
 /* Busca na AVL. Retorna um ponteiro para o nodo buscado, caso contrário NULL */
 AVL *searchAVL(AVL *node, int key);
 
-/* Retorna um ponteiro para o nodo que contém a MENOR valor */
+/* Retorna um ponteiro para o nodo que contém a MENOR chave */
 AVL *minKeyAVL(AVL *node);
 
-/* Retorna um ponteiro para o nodo que contém a MAIOR valor */
+/* Retorna um ponteiro para o nodo que contém a MAIOR chave */
 AVL *maxKeyAVL(AVL *node);
 
 /* Retorna o número de nodos da AVL */
