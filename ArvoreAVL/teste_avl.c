@@ -17,22 +17,20 @@ int main()
 	if (emptyAVL(rootAVL))
 	{
 		printf("\nAVL está vazia!\n");
-		rootAVL = insertNodeAVL(rootAVL, 5);
-		printf("Criando nodo raiz com chave 5...\n");
+		rootAVL = insertNodeAVL(rootAVL, 1);
+		printf("Criando nodo raiz com chave 1...\n");
 		printf("Nodo raiz criado com sucesso!\n\n");
 
-		printf("Inserindo nodo com chave 1...\n");
-		rootAVL = insertNodeAVL(rootAVL, 1);
 		printf("Inserindo nodo com chave 9...\n");
 		rootAVL = insertNodeAVL(rootAVL, 9);
 		printf("Inserindo nodo com chave 10...\n");
 		rootAVL = insertNodeAVL(rootAVL, 10);
-		printf("Inserindo nodo com chave 0...\n");
-		rootAVL = insertNodeAVL(rootAVL, 0);
-		printf("Inserindo nodo com chave 4...\n");
-		rootAVL = insertNodeAVL(rootAVL, 4);
-		printf("Inserindo nodo com chave 8...\n");
-		rootAVL = insertNodeAVL(rootAVL, 8);
+		printf("Inserindo nodo com chave 11...\n");
+		rootAVL = insertNodeAVL(rootAVL, 11);
+		printf("Inserindo nodo com chave 12...\n");
+		rootAVL = insertNodeAVL(rootAVL, 12);
+		printf("Inserindo nodo com chave 13...\n");
+		rootAVL = insertNodeAVL(rootAVL, 13);
 	}
 
 	/* Impressão da AVL em cada formato */
@@ -48,7 +46,7 @@ int main()
 
 	/* Número de nodos da AVL e sua altura*/
 	printf("\n\nNúmero de nodos da AVL: %i\n", numNodesAVL(rootAVL));
-	printf("Altura da AVL: %i", heightAVL(rootAVL));
+	printf("Altura da AVL: %i", heightNodeAVL(rootAVL));
 
 	/* Elementos extremos: máximo e mínimo */
 	AVL *genericNodeAVL;

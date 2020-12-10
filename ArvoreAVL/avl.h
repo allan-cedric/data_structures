@@ -63,4 +63,25 @@ AVL *removeNodeAVL(AVL *root, int key);
 /* Redireciona uma sub-árvore como filho de um novo nodo */
 AVL *transplantSubtreeAVL(AVL *root, AVL *node, AVL *nodeChild);
 
+/* Retorna a altura de um certo node */
+int heightNodeAVL(AVL *node);
+
+/* Retorna o fator de balanceamento de um certo nodo */
+int balanceFactorAVL(AVL *node);
+
+/* Retorna o maior valor entre 2 valores */
+int largest(int x, int y);
+
+/* Rotação simples a direita (Caso Esquerda-Esquerda) */
+AVL *LLRotationAVL(AVL *root);
+
+/* Rotação simples a esquerda (Caso Direita-Direira) */
+AVL *RRRotationAVL(AVL *root);
+
+/* Rotação dupla a direita (Caso Esquerda-Direita) */
+AVL *LRRotationAVL(AVL *root);
+
+/* Rotação dupla a esquerda (Caso Direita-Esquerda) */
+AVL* RLRotationAVL(AVL *root);
+
 #endif

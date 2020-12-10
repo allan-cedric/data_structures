@@ -28,6 +28,7 @@ AVL *newNode(int key)
 	node->left = NULL;
 	node->right = NULL;
 	node->parent = NULL;
+	node->height = 0;
 	node->key = key;
 	return node;
 }
@@ -40,11 +41,25 @@ AVL *insertNodeAVL(AVL *root, int key)
 	{
 		root->left = insertNodeAVL(root->left, key);
 		root->left->parent = root;
+		root->height = largest(heightNodeAVL(root->left), heightNodeAVL(root->right)) + 1;
+		if (balanceFactorAVL(root) == 2)
+		{
+			if (key < root->key)
+				return LLRotationAVL(root);
+			return LRRotationAVL(root);
+		}
 	}
 	else if (key > root->key)
 	{
 		root->right = insertNodeAVL(root->right, key);
 		root->right->parent = root;
+		root->height = largest(heightNodeAVL(root->left), heightNodeAVL(root->right)) + 1;
+		if (balanceFactorAVL(root) == 2)
+		{
+			if (key > root->key)
+				return RRRotationAVL(root);
+			return RLRotationAVL(root);
+		}
 	}
 	return root;
 }
@@ -122,17 +137,6 @@ int numNodesAVL(AVL *root)
 	return (numNodesAVL(root->left) + numNodesAVL(root->right) + 1);
 }
 
-int heightAVL(AVL *root)
-{
-	if (!root)
-		return -1;
-	int heightLeft = heightAVL(root->left);
-	int heightRight = heightAVL(root->right);
-	if (heightRight > heightLeft)
-		return heightRight + 1;
-	return heightLeft + 1;
-}
-
 AVL *removeNodeAVL(AVL *root, int key)
 {
 	AVL *nodeToRemove = searchAVL(root, key);
@@ -172,4 +176,67 @@ AVL *transplantSubtreeAVL(AVL *root, AVL *node, AVL *nodeChild)
 	if (nodeChild)
 		nodeChild->parent = node->parent;
 	return root;
+}
+
+int heightNodeAVL(AVL *node)
+{
+	if (!node)
+		return -1;
+	return node->height;
+}
+
+int balanceFactorAVL(AVL *node)
+{
+	return abs(heightNodeAVL(node->left) - heightNodeAVL(node->right));
+}
+
+int largest(int x, int y)
+{
+	return (x > y ? x : y);
+}
+
+AVL *LLRotationAVL(AVL *root)
+{
+	AVL *node = root->left;
+	root->left = node->right;
+	node->right = root;
+
+	node->parent = root->parent;
+	root->parent = node;
+	if (root->left)
+		root->left->parent = root;
+
+	root->height = largest(heightNodeAVL(root->left), heightNodeAVL(root->right)) + 1;
+	node->height = largest(heightNodeAVL(node->left), root->height) + 1;
+
+	return node;
+}
+
+AVL *RRRotationAVL(AVL *root)
+{
+	AVL *node = root->right;
+	root->right = node->left;
+	node->left = root;
+
+	node->parent = root->parent;
+	root->parent = node;
+	if (root->right)
+		root->right->parent = root;
+
+	root->height = largest(heightNodeAVL(root->left), heightNodeAVL(root->right)) + 1;
+	node->height = largest(root->height, heightNodeAVL(node->right)) + 1;
+
+	return node;
+}
+
+AVL *LRRotationAVL(AVL *root)
+{
+	root->left = RRRotationAVL(root->left);
+	return LLRotationAVL(root);
+}
+
+AVL *RLRotationAVL(AVL *root)
+{
+	root->right = LLRotationAVL(root->right);
+	return RRRotationAVL(root);
 }
