@@ -10,15 +10,16 @@
             
     *Arquivo p/ demonstrar o funcionamento de uma árvore AVL.
 ### Operações fundamentais completas :) :
-    - Inserção
+    - Inserção (com Balanceamento)
     - Remoção
     - Busca
     - Mínimo
     - Máximo
     - Destruição
     - Impressão (inOrder, preOrder, posOrder)
+    - Rotações
     - E muito mais...
-    *Falta o BALANCEAMENTO ainda
+    *Falta o BALANCEAMENTO da REMOÇÃO ainda
     
 ### Compilação:
     No terminal: make
