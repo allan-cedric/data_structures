@@ -70,8 +70,8 @@ int main()
 	else
 		printf("Chave NÃO encontrada\n");
 
-	printf("\n\nRemovendo a chave 5...");
-	rootAVL = removeNodeAVL(rootAVL, 5);
+	printf("\n\nRemovendo a chave 12...");
+	rootAVL = removeNodeAVL(rootAVL, 12);
 	printf("\npreOrder: ");
 	printAVL(rootAVL, "pre");
 
@@ -81,8 +81,8 @@ int main()
 	printf("\nposOrder: ");
 	printAVL(rootAVL, "pos");
 
-	printf("\n\nRemovendo a chave 8...");
-	rootAVL = removeNodeAVL(rootAVL, 8);
+	printf("\n\nRemovendo a chave 13...");
+	rootAVL = removeNodeAVL(rootAVL, 13);
 	printf("\npreOrder: ");
 	printAVL(rootAVL, "pre");
 

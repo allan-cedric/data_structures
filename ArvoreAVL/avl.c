@@ -139,29 +139,59 @@ int numNodesAVL(AVL *root)
 
 AVL *removeNodeAVL(AVL *root, int key)
 {
-	AVL *nodeToRemove = searchAVL(root, key);
-	if (!nodeToRemove)
+	if (!root)
 		return root;
-	if (!nodeToRemove->left)
-		root = transplantSubtreeAVL(root, nodeToRemove, nodeToRemove->right);
-	else if (!nodeToRemove->right)
-		root = transplantSubtreeAVL(root, nodeToRemove, nodeToRemove->left);
+	if (key < root->key)
+	{
+		removeNodeAVL(root->left, key);
+		root->height = largest(heightNodeAVL(root->left), heightNodeAVL(root->right)) + 1;
+		if (balanceFactorAVL(root) == 2)
+		{
+			if (heightNodeAVL(root->right->left) <= heightNodeAVL(root->right->right))
+				return RRRotationAVL(root);
+			return RLRotationAVL(root);
+		}
+	}
+	else if (key > root->key)
+	{
+		removeNodeAVL(root->right, key);
+		root->height = largest(heightNodeAVL(root->left), heightNodeAVL(root->right)) + 1;
+		if (balanceFactorAVL(root) == 2)
+		{
+			if (heightNodeAVL(root->left->right) <= heightNodeAVL(root->left->left))
+				return LLRotationAVL(root);
+			return LRRotationAVL(root);
+		}
+	}
 	else
 	{
-		AVL *nodeSucessor = minKeyAVL(nodeToRemove->right);
-
-		if (nodeSucessor->parent != nodeToRemove)
+		AVL* nodeToRemove = root;
+		if (!nodeToRemove->left)
 		{
-			root = transplantSubtreeAVL(root, nodeSucessor, nodeSucessor->right);
-			nodeSucessor->right = nodeToRemove->right;
-			nodeSucessor->right->parent = nodeSucessor;
+			root = transplantSubtreeAVL(root, nodeToRemove, root->right);
+			free(nodeToRemove);
+			nodeToRemove = NULL;
 		}
-		root = transplantSubtreeAVL(root, nodeToRemove, nodeSucessor);
-		nodeSucessor->left = nodeToRemove->left;
-		nodeSucessor->left->parent = nodeSucessor;
+		else if (!nodeToRemove->right)
+		{
+			root = transplantSubtreeAVL(root, nodeToRemove, root->left);
+			free(nodeToRemove);
+			nodeToRemove = NULL;
+		}
+		else
+		{
+			AVL *nodeSuccessor = minKeyAVL(root->right);
+			root->key = nodeSuccessor->key;
+			removeNodeAVL(root->right, root->key);
+			root->height = largest(heightNodeAVL(root->left), heightNodeAVL(root->right)) + 1;
+			if (balanceFactorAVL(root) == 2)
+			{
+				if (heightNodeAVL(root->left->right) <= heightNodeAVL(root->left->left))
+					return LLRotationAVL(root);
+				return LRRotationAVL(root);
+			}
+		}
 	}
-	free(nodeToRemove);
-	nodeToRemove = NULL;
 	return root;
 }
 
