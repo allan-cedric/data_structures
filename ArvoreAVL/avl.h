@@ -54,9 +54,6 @@ AVL *maxKeyAVL(AVL *node);
 /* Retorna o número de nodos da AVL */
 int numNodesAVL(AVL *node);
 
-/* Retorna a altura (nível máximo) da AVL */
-int heightAVL(AVL *node);
-
 /* Remove um nodo da AVL */
 AVL *removeNodeAVL(AVL *root, int key);
 
