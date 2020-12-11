@@ -44,7 +44,7 @@ AVL *insertNodeAVL(AVL *root, int key)
 		root->height = largest(heightNodeAVL(root->left), heightNodeAVL(root->right)) + 1;
 		if (balanceFactorAVL(root) == 2)
 		{
-			if (key < root->key)
+			if (key < root->left->key)
 				return LLRotationAVL(root);
 			return LRRotationAVL(root);
 		}
@@ -56,7 +56,7 @@ AVL *insertNodeAVL(AVL *root, int key)
 		root->height = largest(heightNodeAVL(root->left), heightNodeAVL(root->right)) + 1;
 		if (balanceFactorAVL(root) == 2)
 		{
-			if (key > root->key)
+			if (key > root->right->key)
 				return RRRotationAVL(root);
 			return RLRotationAVL(root);
 		}
@@ -143,7 +143,9 @@ AVL *removeNodeAVL(AVL *root, int key)
 		return root;
 	if (key < root->key)
 	{
-		removeNodeAVL(root->left, key);
+		root->left = removeNodeAVL(root->left, key);
+		if (root->left)
+			root->left->parent = root;
 		root->height = largest(heightNodeAVL(root->left), heightNodeAVL(root->right)) + 1;
 		if (balanceFactorAVL(root) == 2)
 		{
@@ -154,7 +156,9 @@ AVL *removeNodeAVL(AVL *root, int key)
 	}
 	else if (key > root->key)
 	{
-		removeNodeAVL(root->right, key);
+		root->right = removeNodeAVL(root->right, key);
+		if (root->right)
+			root->right->parent = root;
 		root->height = largest(heightNodeAVL(root->left), heightNodeAVL(root->right)) + 1;
 		if (balanceFactorAVL(root) == 2)
 		{
@@ -165,24 +169,19 @@ AVL *removeNodeAVL(AVL *root, int key)
 	}
 	else
 	{
-		AVL* nodeToRemove = root;
-		if (!nodeToRemove->left)
+		if (!root->left || !root->right)
 		{
-			root = transplantSubtreeAVL(root, nodeToRemove, root->right);
-			free(nodeToRemove);
-			nodeToRemove = NULL;
-		}
-		else if (!nodeToRemove->right)
-		{
-			root = transplantSubtreeAVL(root, nodeToRemove, root->left);
+			AVL *nodeToRemove = root;
+			root = (root->left ? root->left : root->right);
 			free(nodeToRemove);
 			nodeToRemove = NULL;
 		}
 		else
 		{
+#ifdef _SUCESSOR_
 			AVL *nodeSuccessor = minKeyAVL(root->right);
 			root->key = nodeSuccessor->key;
-			removeNodeAVL(root->right, root->key);
+			root->right = removeNodeAVL(root->right, root->key);
 			root->height = largest(heightNodeAVL(root->left), heightNodeAVL(root->right)) + 1;
 			if (balanceFactorAVL(root) == 2)
 			{
@@ -190,21 +189,21 @@ AVL *removeNodeAVL(AVL *root, int key)
 					return LLRotationAVL(root);
 				return LRRotationAVL(root);
 			}
+#endif
+#ifdef _PREDECESSOR_
+			AVL *nodePredecessor = maxKeyAVL(root->left);
+			root->key = nodePredecessor->key;
+			root->left = removeNodeAVL(root->left, root->key);
+			root->height = largest(heightNodeAVL(root->left), heightNodeAVL(root->right)) + 1;
+			if (balanceFactorAVL(root) == 2)
+			{
+				if (heightNodeAVL(root->right->left) <= heightNodeAVL(root->right->right))
+					return RRRotationAVL(root);
+				return RLRotationAVL(root);
+			}
+#endif
 		}
 	}
-	return root;
-}
-
-AVL *transplantSubtreeAVL(AVL *root, AVL *node, AVL *nodeChild)
-{
-	if (!node->parent)
-		root = nodeChild;
-	else if (node == node->parent->left)
-		node->parent->left = nodeChild;
-	else
-		node->parent->right = nodeChild;
-	if (nodeChild)
-		nodeChild->parent = node->parent;
 	return root;
 }
 
