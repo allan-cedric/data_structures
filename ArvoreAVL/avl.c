@@ -40,7 +40,8 @@ AVL *insertNodeAVL(AVL *root, int key)
 	if (key < root->key)
 	{
 		root->left = insertNodeAVL(root->left, key);
-		root->left->parent = root;
+		root->left->parent = root; /* Ajusta o pai */
+		/* Balanceamento */
 		root->height = largest(heightNodeAVL(root->left), heightNodeAVL(root->right)) + 1;
 		if (balanceFactorAVL(root) == 2)
 		{
@@ -52,7 +53,8 @@ AVL *insertNodeAVL(AVL *root, int key)
 	else if (key > root->key)
 	{
 		root->right = insertNodeAVL(root->right, key);
-		root->right->parent = root;
+		root->right->parent = root; /* Ajusta o pai */
+		/* Balanceamento */
 		root->height = largest(heightNodeAVL(root->left), heightNodeAVL(root->right)) + 1;
 		if (balanceFactorAVL(root) == 2)
 		{
@@ -144,8 +146,7 @@ AVL *removeNodeAVL(AVL *root, int key)
 	if (key < root->key)
 	{
 		root->left = removeNodeAVL(root->left, key);
-		if (root->left)
-			root->left->parent = root;
+		/* Balanceamento */
 		root->height = largest(heightNodeAVL(root->left), heightNodeAVL(root->right)) + 1;
 		if (balanceFactorAVL(root) == 2)
 		{
@@ -157,8 +158,7 @@ AVL *removeNodeAVL(AVL *root, int key)
 	else if (key > root->key)
 	{
 		root->right = removeNodeAVL(root->right, key);
-		if (root->right)
-			root->right->parent = root;
+		/* Balanceamento */
 		root->height = largest(heightNodeAVL(root->left), heightNodeAVL(root->right)) + 1;
 		if (balanceFactorAVL(root) == 2)
 		{
@@ -169,19 +169,24 @@ AVL *removeNodeAVL(AVL *root, int key)
 	}
 	else
 	{
+		/* Remoção de um nodo com 1 ou nenhum filho */
 		if (!root->left || !root->right)
 		{
 			AVL *nodeToRemove = root;
 			root = (root->left ? root->left : root->right);
+			if (root) /* Ajusta possível pai */
+				root->parent = nodeToRemove->parent;
 			free(nodeToRemove);
 			nodeToRemove = NULL;
 		}
+		/* Remoção de um nodo com 2 filhos */
 		else
 		{
 #ifdef _SUCESSOR_
 			AVL *nodeSuccessor = minKeyAVL(root->right);
 			root->key = nodeSuccessor->key;
 			root->right = removeNodeAVL(root->right, root->key);
+			/* Balanceamento */
 			root->height = largest(heightNodeAVL(root->left), heightNodeAVL(root->right)) + 1;
 			if (balanceFactorAVL(root) == 2)
 			{
@@ -194,6 +199,7 @@ AVL *removeNodeAVL(AVL *root, int key)
 			AVL *nodePredecessor = maxKeyAVL(root->left);
 			root->key = nodePredecessor->key;
 			root->left = removeNodeAVL(root->left, root->key);
+			/* Balanceamento */
 			root->height = largest(heightNodeAVL(root->left), heightNodeAVL(root->right)) + 1;
 			if (balanceFactorAVL(root) == 2)
 			{
@@ -224,6 +230,16 @@ int largest(int x, int y)
 	return (x > y ? x : y);
 }
 
+/*
+	Rotação simples a direita (Caso Esquerda-Esquerda):
+
+        Z            Y
+       /            / \
+	  Y     =>     X   Z
+	 /
+	X
+
+*/
 AVL *LLRotationAVL(AVL *root)
 {
 	AVL *node = root->left;
@@ -241,6 +257,16 @@ AVL *LLRotationAVL(AVL *root)
 	return node;
 }
 
+/*
+	Rotação simples a esquerda (Caso Direita-Direita):
+
+        Z              Y
+         \            / \
+	      Y     =>   Z   X
+	       \
+	        X
+
+*/
 AVL *RRRotationAVL(AVL *root)
 {
 	AVL *node = root->right;
@@ -258,12 +284,32 @@ AVL *RRRotationAVL(AVL *root)
 	return node;
 }
 
+/*
+	Rotação dupla a direita (Caso Esquerda-Direita):
+
+        Z                Z               X 
+       /     (RR)       /      (LL)     / \
+	  Y       =>       X        =>     Y   Z
+	   \              /
+		X            Y
+
+*/
 AVL *LRRotationAVL(AVL *root)
 {
 	root->left = RRRotationAVL(root->left);
 	return LLRotationAVL(root);
 }
 
+/*
+	Rotação dupla a esquerda (Caso Direita-Esquerda):
+
+        Z                Z                 X 
+         \     (LL)       \      (RR)     / \
+	      Y     =>         X      =>     Z   Y
+	     /                  \
+		X                    Y
+
+*/
 AVL *RLRotationAVL(AVL *root)
 {
 	root->right = LLRotationAVL(root->right);

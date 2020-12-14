@@ -9,10 +9,10 @@
 #define AVL_H
 
 /*
-  Setup para o algoritmo de remoção, pode escolher pelo o formato com sucessor ou antecessor
+  Setup para o algoritmo de remoção, pode escolher pelo formato com sucessor ou antecessor
 */
 
-/* Comente essa linha para usar o sucessor */
+/* Comente essa linha imediatamente abaixo para usar o sucessor, por default está configurado para antecessor */
 #define _PREDECESSOR_
 
 #ifndef _PREDECESSOR_
@@ -90,7 +90,7 @@ int largest(int x, int y);
 /* Rotação simples a direita (Caso Esquerda-Esquerda) */
 AVL *LLRotationAVL(AVL *root);
 
-/* Rotação simples a esquerda (Caso Direita-Direira) */
+/* Rotação simples a esquerda (Caso Direita-Direita) */
 AVL *RRRotationAVL(AVL *root);
 
 /* Rotação dupla a direita (Caso Esquerda-Direita) */
