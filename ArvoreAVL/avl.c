@@ -230,16 +230,6 @@ int largest(int x, int y)
 	return (x > y ? x : y);
 }
 
-/*
-	Rotação simples a direita (Caso Esquerda-Esquerda):
-
-        Z            Y
-       /            / \
-	  Y     =>     X   Z
-	 /
-	X
-
-*/
 AVL *LLRotationAVL(AVL *root)
 {
 	AVL *node = root->left;
@@ -257,16 +247,6 @@ AVL *LLRotationAVL(AVL *root)
 	return node;
 }
 
-/*
-	Rotação simples a esquerda (Caso Direita-Direita):
-
-        Z              Y
-         \            / \
-	      Y     =>   Z   X
-	       \
-	        X
-
-*/
 AVL *RRRotationAVL(AVL *root)
 {
 	AVL *node = root->right;
@@ -284,32 +264,12 @@ AVL *RRRotationAVL(AVL *root)
 	return node;
 }
 
-/*
-	Rotação dupla a direita (Caso Esquerda-Direita):
-
-        Z                Z               X 
-       /     (RR)       /      (LL)     / \
-	  Y       =>       X        =>     Y   Z
-	   \              /
-		X            Y
-
-*/
 AVL *LRRotationAVL(AVL *root)
 {
 	root->left = RRRotationAVL(root->left);
 	return LLRotationAVL(root);
 }
 
-/*
-	Rotação dupla a esquerda (Caso Direita-Esquerda):
-
-        Z                Z                 X 
-         \     (LL)       \      (RR)     / \
-	      Y     =>         X      =>     Z   Y
-	     /                  \
-		X                    Y
-
-*/
 AVL *RLRotationAVL(AVL *root)
 {
 	root->right = LLRotationAVL(root->right);
