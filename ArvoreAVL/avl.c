@@ -19,7 +19,7 @@ AVL *createAVL()
 
 AVL *newNode(int key)
 {
-	AVL *node = malloc(sizeof(AVL));
+	AVL *node = (AVL *)malloc(sizeof(AVL));
 	if (!node)
 	{
 		perror("Not enough memory to create a new node! - 'newNode()'");
