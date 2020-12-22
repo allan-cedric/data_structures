@@ -33,6 +33,12 @@ AVL *newNode(int key)
 	return node;
 }
 
+/* 
+	Método de inserção em uma árvore AVL:
+
+	Foi realizado recursivamente, e o princípio
+	desse algoritmo é inserir um novo nodo como folha.
+*/
 AVL *insertNodeAVL(AVL *root, int key)
 {
 	if (!root)
@@ -139,6 +145,14 @@ int numNodesAVL(AVL *root)
 	return (numNodesAVL(root->left) + numNodesAVL(root->right) + 1);
 }
 
+/*
+	Método de remoção em uma árvore AVL:
+
+	A implementação desse algoritmo ficou
+	muito parecida com o método de inserção.
+	A estratégia de deleção de um nodo possui
+	o tratamento para 0, 1 ou 2 filhos.
+*/
 AVL *removeNodeAVL(AVL *root, int key)
 {
 	if (!root)
@@ -183,6 +197,10 @@ AVL *removeNodeAVL(AVL *root, int key)
 		else
 		{
 #ifdef _SUCESSOR_
+			/* 
+				Pega o sucessor, copia a chave do sucessor no nodo alvo de remoção 
+				e direciona a remoção para o nodo sucessor.
+			*/
 			AVL *nodeSuccessor = minKeyAVL(root->right);
 			root->key = nodeSuccessor->key;
 			root->right = removeNodeAVL(root->right, root->key);
@@ -196,6 +214,10 @@ AVL *removeNodeAVL(AVL *root, int key)
 			}
 #endif
 #ifdef _PREDECESSOR_
+			/* 
+				Pega o antecessor, copia a chave do antecessor no nodo alvo de remoção 
+				e direciona a remoção para o nodo antecessor. 
+			*/
 			AVL *nodePredecessor = maxKeyAVL(root->left);
 			root->key = nodePredecessor->key;
 			root->left = removeNodeAVL(root->left, root->key);
@@ -232,46 +254,56 @@ int largest(int x, int y)
 
 AVL *LLRotationAVL(AVL *root)
 {
+	/* Tratamento de novos filhos */
 	AVL *node = root->left;
 	root->left = node->right;
 	node->right = root;
 
+	/* Tratamento de novos pais */
 	node->parent = root->parent;
 	root->parent = node;
 	if (root->left)
 		root->left->parent = root;
 
+	/* Reajuste de alturas */
 	root->height = largest(heightNodeAVL(root->left), heightNodeAVL(root->right)) + 1;
 	node->height = largest(heightNodeAVL(node->left), root->height) + 1;
 
+	/* Retorna a nova raiz dessa árvore rotacionada */
 	return node;
 }
 
 AVL *RRRotationAVL(AVL *root)
 {
+	/* Tratamento de novos filhos */
 	AVL *node = root->right;
 	root->right = node->left;
 	node->left = root;
 
+	/* Tratamento de novos pais */
 	node->parent = root->parent;
 	root->parent = node;
 	if (root->right)
 		root->right->parent = root;
 
+	/* Reajuste de alturas */
 	root->height = largest(heightNodeAVL(root->left), heightNodeAVL(root->right)) + 1;
 	node->height = largest(root->height, heightNodeAVL(node->right)) + 1;
 
+	/* Retorna a nova raiz dessa árvore rotacionada */
 	return node;
 }
 
 AVL *LRRotationAVL(AVL *root)
 {
+	/* Sistema de rotação dupla: primeiro para a esquerda depois para direita */
 	root->left = RRRotationAVL(root->left);
 	return LLRotationAVL(root);
 }
 
 AVL *RLRotationAVL(AVL *root)
 {
+	/* Sistema de rotação dupla: primeiro para a direita depois para esquerda */
 	root->right = LLRotationAVL(root->right);
 	return RRRotationAVL(root);
 }
