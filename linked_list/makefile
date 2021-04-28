@@ -1,18 +1,14 @@
 CC=gcc
-CFLAGS=-ansi -Wall
-OBJ=lista.o teste_lista.o
-EXEC=teste_lista
+CFLAGS=--std=c99 -Wextra -Wall -g
+OBJ=linked_list.o test_linked_list.o
+EXEC=test_linked_list
 
-all: $(EXEC) clean
+all: $(EXEC)
 
-teste_lista: $(OBJ)
-	$(CC) $(OBJ) -o $(EXEC) $(CFLAGS)
+$(EXEC): $(OBJ)
 
-lista.o: lista.h lista.c
-	$(CC) -c lista.c $(CFLAGS)
-
-teste_lista.o: lista.h lista.c
-	$(CC) -c teste_lista.c $(CFLAGS)
+linked_list.o: linked_list.h linked_list.c
+test_linked_list.o: linked_list.h test_linked_list.c
 
 clean:
 	-rm -f $(OBJ) *~
