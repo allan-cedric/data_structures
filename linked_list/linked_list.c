@@ -1,267 +1,260 @@
-/* 
-   Source file : 'lista.c' 
-   Escrito por : Allan Cedric G.B. Alves da Silva
-   Profile : Aluno de graduação do curso de Ciência da Computação (UFPR)
-   GRR : 20190351
-*/
+// === Source file: linked_list.c ===
 
-#include "lista.h"
+#include "linked_list.h"
 
-void cria_lista(t_lista *l)
+void init_list(linked_list_t *l)
 {
-	l->tamanho = 0;
-	l->ini = NULL;
+	l->init = NULL;
+	l->size = 0;
 }
 
-int lista_vazia(t_lista *l)
+int empty_list(linked_list_t *l)
 {
-	return (l->ini == NULL);
+	return (l->init == NULL);
 }
 
-void destroi_lista(t_lista *l)
+void destroy_list(linked_list_t *l)
 {
 
-	if (lista_vazia(l))
+	if (empty_list(l))
 		return;
 
-	t_nodo *p;
+	node_t *p;
 
-	while (!lista_vazia(l))
+	while (!empty_list(l))
 	{
 
-		p = l->ini->prox;
-		free(l->ini);
-		l->ini = p;
+		p = l->init->next;
+		free(l->init);
+		l->init = p;
 	}
 
-	l->tamanho = 0;
+	l->size = 0;
 }
 
-int insere_inicio_lista(int x, t_lista *l)
+void push_front_list(int x, linked_list_t *l)
 {
+	node_t *element = (node_t *)malloc(sizeof(node_t));
 
-	t_nodo *elemento = (t_nodo *)malloc(sizeof(t_nodo));
-
-	if (!elemento)
-		return 0;
-
-	elemento->chave = x;
-	elemento->prox = l->ini;
-	l->ini = elemento;
-
-	l->tamanho++;
-
-	return 1;
-}
-
-int insere_fim_lista(int x, t_lista *l)
-{
-	if (lista_vazia(l))
-		return (insere_inicio_lista(x, l));
-
-	t_nodo *elemento, *p;
-
-	elemento = (t_nodo *)malloc(sizeof(t_nodo));
-
-	if (!elemento)
-		return 0;
-
-	p = l->ini;
-
-	while (p->prox)
-		p = p->prox;
-
-	elemento->chave = x;
-	p->prox = elemento;
-	elemento->prox = NULL;
-
-	l->tamanho++;
-
-	return 1;
-}
-
-int insere_ordenado_lista(int x, t_lista *l)
-{
-	if (lista_vazia(l) || x < l->ini->chave)
-		return (insere_inicio_lista(x, l));
-
-	t_nodo *ant, *p;
-
-	ant = NULL;
-	p = l->ini;
-
-	while (x >= p->chave && p->prox)
+	if (!element)
 	{
-		ant = p;
-		p = p->prox;
+		fprintf(stderr, "Memory allocation error!\n");
+		exit(1);
 	}
 
-	if (x >= p->chave && !p->prox)
-		return (insere_fim_lista(x, l));
+	element->key = x;
+	element->next = l->init;
+	l->init = element;
 
-	t_nodo *elemento = (t_nodo *)malloc(sizeof(t_nodo));
-
-	if (!elemento)
-		return 0;
-
-	elemento->chave = x;
-	ant->prox = elemento;
-	elemento->prox = p;
-
-	l->tamanho++;
-
-	return 1;
+	l->size++;
 }
 
-int remove_primeiro_lista(int *item, t_lista *l)
+void push_back_list(int x, linked_list_t *l)
 {
-
-	if (lista_vazia(l))
-		return 0;
-
-	t_nodo *p = l->ini->prox;
-
-	*item = l->ini->chave;
-
-	free(l->ini);
-
-	l->ini = p;
-
-	l->tamanho--;
-
-	return 1;
-}
-
-int remove_ultimo_lista(int *item, t_lista *l)
-{
-
-	if (lista_vazia(l))
-		return 0;
-
-	t_nodo *ant, *p;
-
-	ant = NULL;
-	p = l->ini;
-
-	while (p->prox)
+	if (empty_list(l))
 	{
-		ant = p;
-		p = p->prox;
+		push_front_list(x, l);
+		return;
 	}
 
-	*item = p->chave;
+	node_t *element, *p;
+
+	element = (node_t *)malloc(sizeof(node_t));
+
+	if (!element)
+	{
+		fprintf(stderr, "Memory allocation error!\n");
+		exit(1);
+	}
+
+	p = l->init;
+
+	while (p->next)
+		p = p->next;
+
+	element->key = x;
+	p->next = element;
+	element->next = NULL;
+
+	l->size++;
+}
+
+void push_inorder_list(int x, linked_list_t *l)
+{
+	if (empty_list(l) || x < l->init->key)
+	{
+		push_front_list(x, l);
+		return;
+	}
+
+	node_t *before, *p;
+
+	before = NULL;
+	p = l->init;
+
+	while (x >= p->key && p->next)
+	{
+		before = p;
+		p = p->next;
+	}
+
+	node_t *element = (node_t *)malloc(sizeof(node_t));
+
+	if (!element)
+	{
+		fprintf(stderr, "Memory allocation error!\n");
+		exit(1);
+	}
+
+	element->key = x;
+	if (x >= p->key)
+	{
+		p->next = element;
+		element->next = NULL;
+	}
+	else
+	{
+		before->next = element;
+		element->next = p;
+	}
+
+	l->size++;
+}
+
+void pop_front_list(int *item, linked_list_t *l)
+{
+	if (empty_list(l))
+		return;
+
+	node_t *p = l->init->next;
+
+	*item = l->init->key;
+
+	free(l->init);
+
+	l->init = p;
+
+	l->size--;
+}
+
+void pop_back_list(int *item, linked_list_t *l)
+{
+	if (empty_list(l))
+		return;
+
+	node_t *before, *p;
+
+	before = NULL;
+	p = l->init;
+
+	while (p->next)
+	{
+		before = p;
+		p = p->next;
+	}
+
+	*item = p->key;
 
 	free(p);
 
-	if (ant)
-		ant->prox = NULL;
+	if (before)
+		before->next = NULL;
 
-	l->tamanho--;
-
-	return 1;
+	l->size--;
 }
 
-int remove_item_lista(int chave, int *item, t_lista *l)
+void pop_list(int key, int *item, linked_list_t *l)
 {
+	if (empty_list(l))
+		return;
 
-	if (lista_vazia(l))
-		return 0;
+	node_t *before, *p;
 
-	t_nodo *ant, *p;
+	before = NULL;
+	p = l->init;
 
-	ant = NULL;
-	p = l->ini;
-
-	while (p->chave != chave && p->prox)
+	while (p->key != key && p->next)
 	{
-		ant = p;
-		p = p->prox;
+		before = p;
+		p = p->next;
 	}
 
-	if (p->chave != chave)
-		return 0;
+	if (p->key != key)
+		return;
 
-	*item = p->chave;
+	*item = p->key;
 
-	if (!ant)
-		l->ini = l->ini->prox;
+	if (!before)
+		l->init = l->init->next;
 	else
-		ant->prox = p->prox;
+		before->next = p->next;
 
 	free(p);
 
-	l->tamanho--;
-
-	return 1;
+	l->size--;
 }
 
-int pertence_lista(int chave, t_lista *l)
+int in_list(int key, linked_list_t *l)
 {
-
-	if (lista_vazia(l))
+	if (empty_list(l))
 		return 0;
 
-	t_nodo *p = l->ini;
+	node_t *p = l->init;
 
-	while (p->chave != chave && p->prox)
-		p = p->prox;
+	while (p->key != key && p->next)
+		p = p->next;
 
-	return (p->chave == chave);
+	return (p->key == key);
 }
 
-int concatena_listas(t_lista *l, t_lista *m)
+void concatenate_lists(linked_list_t *l, linked_list_t *m)
 {
+	if (empty_list(m))
+		return;
 
-	if (lista_vazia(m))
-		return 0;
+	node_t *p = l->init;
 
-	t_nodo *p = l->ini;
-
-	if (!lista_vazia(l))
+	if (!empty_list(l))
 	{
-		while (p->prox)
-			p = p->prox;
-		p->prox = m->ini;
+		while (p->next)
+			p = p->next;
+		p->next = m->init;
 	}
 	else
-		l->ini = m->ini;
+		l->init = m->init;
 
-	l->tamanho += m->tamanho;
-
-	return 1;
+	l->size += m->size;
 }
 
-int copia_lista(t_lista *l, t_lista *m)
+void copy_list(linked_list_t *l, linked_list_t *m)
 {
-	cria_lista(m);
+	init_list(m);
 
-	if (lista_vazia(l))
-		return 0;
+	if (empty_list(l))
+		return;
 
-	t_nodo *p = l->ini;
+	node_t *p = l->init;
 
-	while (p->prox)
+	while (p->next)
 	{
-		insere_fim_lista(p->chave, m);
-		p = p->prox;
+		push_back_list(p->key, m);
+		p = p->next;
 	}
 
-	insere_fim_lista(p->chave, m);
-
-	return 1;
+	push_back_list(p->key, m);
 }
 
-void imprime_lista(t_lista *l)
+void print_list(linked_list_t *l)
 {
-	if (!lista_vazia(l))
+	if (!empty_list(l))
 	{
-		t_nodo *p = l->ini;
+		node_t *p = l->init;
 
-		while (p->prox)
+		while (p->next)
 		{
-			printf("%d ", p->chave);
-			p = p->prox;
+			printf("%d ", p->key);
+			p = p->next;
 		}
-		printf("%d\n", p->chave);
+		printf("%d\n", p->key);
 	}
 }
