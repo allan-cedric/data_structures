@@ -15,7 +15,6 @@ int empty_list(linked_list_t *l)
 
 void destroy_list(linked_list_t *l)
 {
-
 	if (empty_list(l))
 		return;
 
