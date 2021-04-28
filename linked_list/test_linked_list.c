@@ -1,95 +1,88 @@
-/* 
-   Source file : 'teste_lista.c' 
-   Escrito por : Allan Cedric G.B. Alves da Silva
-   Profile : Aluno de graduação do curso de Ciência da Computação (UFPR)
-   GRR : 20190351
-*/
+// === Source file: test_linked_list.c ===
 
-#include "lista.h"
+#include "linked_list.h"
 #include <time.h>
 
 int main()
 {
     srand(time(NULL));
 
-    t_lista lista, lista_1, lista_2;
+    linked_list_t list, list_1, list_2;
 
-    printf("\nCriando a 'lista'...\n");
-    cria_lista(&lista);
-    printf("Lista criada com sucesso!\n\n");
+    printf("\nCreating 'list'...\n");
+    init_list(&list);
+    printf("'list' created successfully!\n\n");
 
-    int i;
-    for (i = 0; i < 10; i++)
+    for (int i = 0; i < 10; i++)
     {
-        printf("Inserindo %i no início...\n", i);
-        insere_inicio_lista(i, &lista);
+        printf("Inserting %i at beginning...\n", i);
+        push_front_list(i, &list);
     }
 
-    printf("'lista': ");
-    imprime_lista(&lista);
-    printf("\nVerificando se a chave 5 está na 'lista'...\n");
-    if (pertence_lista(5, &lista))
-        printf("ENCONTREI!\n\n");
+    printf("'list': ");
+    print_list(&list);
+    printf("\nChecking if the key 5 is in 'list'...\n");
+    if (in_list(5, &list))
+        printf("FOUND IT!\n\n");
     else
-        printf("NÃO encontrei\n\n");
+        printf("NO EXIST\n\n");
 
     int r;
-    printf("Removendo o primeiro nodo...\n");
-    remove_primeiro_lista(&r, &lista);
-    printf("Removendo último nodo...\n");
-    remove_ultimo_lista(&r, &lista);
-    printf("Removendo o nodo com chave 5...\n");
-    remove_item_lista(5, &r, &lista);
-    printf("'lista': ");
-    imprime_lista(&lista);
-    printf("\nVerificando se a chave 5 está na 'lista'...\n");
-    if (pertence_lista(5, &lista))
-        printf("ENCONTREI!\n\n");
+    printf("Removing the first element...\n");
+    pop_front_list(&r, &list);
+    printf("Removing the last element...\n");
+    pop_back_list(&r, &list);
+    printf("Removing a element with key 5...\n");
+    pop_list(5, &r, &list);
+    printf("'list': ");
+    print_list(&list);
+    printf("\nChecking if the key 5 is in 'list'...\n");
+    if (in_list(5, &list))
+        printf("FOUND IT!\n\n");
     else
-        printf("NÃO encontrei\n\n");
+        printf("NO EXIST\n\n");
 
-    printf("Destruindo 'lista'...\n\n");
-    destroi_lista(&lista);
+    printf("Destroying 'list'...\n\n");
+    destroy_list(&list);
 
-    for (i = 0; i < 10; i++)
+    for (int i = 0; i < 10; i++)
     {
-        printf("Inserindo %i no final...\n", i);
-        insere_fim_lista(i, &lista);
+        printf("Inserting %i at ending...\n", i);
+        push_back_list(i, &list);
     }
 
-    printf("'lista': ");
-    imprime_lista(&lista);
+    printf("'list': ");
+    print_list(&list);
 
-    printf("\nCriando a 'lista_1'...\n");
-    cria_lista(&lista_1);
-    printf("Lista criada com sucesso!\n\n");
+    printf("\nCreating 'list_1'...\n");
+    init_list(&list_1);
+    printf("'list_1' created successfully!\n\n");
 
-    int e;
-    for (i = 0; i < 10; i++)
+    for (int i = 0, e; i < 10; i++)
     {
         e = rand() % 20;
-        printf("Inserindo %i ordenado...\n", e);
-        insere_ordenado_lista(e, &lista_1);
+        printf("Inserting %i in order...\n", e);
+        push_inorder_list(e, &list_1);
     }
 
-    printf("'lista_1': ");
-    imprime_lista(&lista_1);
+    printf("'list_1': ");
+    print_list(&list_1);
 
-    printf("\nConcatenando 'lista' e 'lista_1'...\n");
-    concatena_listas(&lista, &lista_1);
+    printf("\nConcatenating 'list' with 'list_1'...\n");
+    concatenate_lists(&list, &list_1);
 
-    printf("'lista': ");
-    imprime_lista(&lista);
+    printf("'list': ");
+    print_list(&list);
 
-    printf("\nCopiando a 'lista' em uma nova lista, 'lista_2'...\n");
-    copia_lista(&lista, &lista_2);
+    printf("\nCopying 'list' to 'list_2'...\n");
+    copy_list(&list, &list_2);
 
-    printf("'lista_2': ");
-    imprime_lista(&lista_2);
+    printf("'list_2': ");
+    print_list(&list_2);
 
-    printf("\nDestruindo todas as listas!\n\n");
-    destroi_lista(&lista);
-    destroi_lista(&lista_2);
+    printf("\nDestroying all lists!\n\n");
+    destroy_list(&list);
+    destroy_list(&list_2);
 
     return 0;
 }
