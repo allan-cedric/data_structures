@@ -55,7 +55,7 @@ void pop_list(int key, int *item, linked_list_t *l);
 // Retorna 1 se encontrou, senão 0.
 int in_list(int key, linked_list_t *l);
 
-// === Concatena duas listas distintas ===
+// === Concatena uma lista 'm' em uma lista 'l' ===
 void concatenate_lists(linked_list_t *l, linked_list_t *m);
 
 // === Cria uma cópia da lista 'l' na lista 'm' ===
