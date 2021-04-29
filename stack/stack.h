@@ -5,6 +5,7 @@
 
 // === Bibliotecas ===
 #include <stdio.h>
+#include <stdlib.h>
 
 // === Estrutura de dados de um nodo com chave inteira ===
 typedef struct node_t
@@ -26,6 +27,9 @@ void init_stack(stack_t *s);
 // === Retorna 1 se a pilha está vazia, senão 0 ===
 int empty_stack(stack_t *s);
 
+// === Destrói a pilha ===
+void destroy_stack(stack_t *s);
+
 // === Retorna o tamanho da pilha ===
 int stack_size(stack_t *s);
 
@@ -33,7 +37,7 @@ int stack_size(stack_t *s);
 void push_stack(int x, stack_t *s);
 
 // === Desempilha um elemento da pilha ===
-int pop_stack(stack_t *s);
+void pop_stack(stack_t *s);
 
 // === Retorna o elemento no topo da pilha ===
 int top_stack(stack_t *s);
