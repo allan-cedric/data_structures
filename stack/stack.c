@@ -1,49 +1,63 @@
-/* 
-   Source file : 'pilha.c'
-   Escrito por : Allan Cedric G.B. Alves da Silva
-   Profile : Aluno de graduação do curso de Ciência da Computação (UFPR)
-   GRR : 20190351
-*/
+// === Source file: stack.c ===
 
-#include "pilha.h"
+#include "stack.h"
 
-void inicializa_pilha(pilha_t *p)
+void init_stack(stack_t *s)
 {
-	p->topo = -1;
+	s->init = NULL;
+	s->size = 0;
 }
 
-int pilha_vazia(pilha_t *p)
+int empty_stack(stack_t *s)
 {
-	return (p->topo == -1);
+	return (s->init == NULL);
 }
 
-int tamanho_pilha(pilha_t *p)
+void destroy_stack(stack_t *s)
 {
-	return (p->topo + 1);
-}
-
-int empilha(int x, pilha_t *p)
-{
-	if (tamanho_pilha(p) < MAX)
+	while (!empty_stack(s))
 	{
-		p->v[++(p->topo)] = x;
-		return 1;
+		node_t *p = s->init->next;
+		free(s->init);
+		s->init = p;
 	}
-	return 0;
+	s->size = 0;
 }
 
-int desempilha(pilha_t *p)
+int stack_size(stack_t *s)
 {
-	if (pilha_vazia(p))
-		return 0;
-	p->topo--;
-	return 1;
+	return s->size;
 }
 
-int topo(int *t, pilha_t *p)
+void push_stack(int x, stack_t *s)
 {
-	if (pilha_vazia(p))
-		return 0;
-	*t = p->v[p->topo];
-	return 1;
+	node_t *element = (node_t *)malloc(sizeof(node_t));
+
+	if (!element)
+	{
+		fprintf(stderr, "Memory allocation error!\n");
+		exit(1);
+	}
+
+	element->key = x;
+	element->next = s->init;
+	s->init = element;
+	s->size++;
+}
+
+void pop_stack(stack_t *s)
+{
+	if (empty_stack(s))
+		return;
+
+	node_t *p = s->init->next;
+
+	free(s->init);
+	s->init = p;
+	s->size--;
+}
+
+int top_stack(stack_t *s)
+{
+	return s->init->key;
 }
