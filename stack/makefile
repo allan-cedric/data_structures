@@ -1,18 +1,14 @@
 CC=gcc
-CFLAGS=-ansi -Wall
-OBJ=pilha.o teste_pilha.o
-EXEC=teste_pilha
+CFLAGS=-Wextra -Wall -g
+OBJ=stack.o test_stack.o
+EXEC=test_stack
 
-all: teste_pilha clean
+all: $(EXEC)
 
-teste_pilha: $(OBJ)
-	$(CC) $(OBJ) -o $(EXEC) $(CFLAGS)
+$(EXEC): $(OBJ)
 
-pilha.o: pilha.h pilha.c
-	$(CC) -c pilha.c $(CFLAGS)
-
-teste_pilha.o: pilha.h pilha.c
-	$(CC) -c teste_pilha.c $(CFLAGS)
+stack.o: stack.h stack.c
+test_stack.o: stack.h test_stack.c
 
 clean:
 	-rm -f $(OBJ) *~
