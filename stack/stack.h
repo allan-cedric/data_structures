@@ -1,57 +1,41 @@
-/* 
-   Header file : 'pilha.h'
-   Escrito por : Allan Cedric G.B. Alves da Silva
-   Profile : Aluno de graduação do curso de Ciência da Computação (UFPR)
-   GRR : 20190351
-*/
+// === Header file: stack.h ===
 
-#ifndef __PILHA_H__
-#define __PILHA_H__
+#ifndef __STACK_H__
+#define __STACK_H__
 
+// === Bibliotecas ===
 #include <stdio.h>
 
-#define MAX 100 /* Tamanho da pilha */
-
-typedef struct pilha_t
+// === Estrutura de dados de um nodo com chave inteira ===
+typedef struct node_t
 {
-	int v[MAX];
-	int topo;
-} pilha_t;
+	int key;
+	struct node_t *next;
+} node_t;
 
-/*
-	Função que inicializa uma pilha.
-	Se ela já existir, então será sobrescrita uma nova.
-*/
-void inicializa_pilha(pilha_t *p);
+// === Estrutura de dados: Stack ===
+typedef struct stack_t
+{
+	node_t *init;
+	int size;
+} stack_t;
 
-/*
-	Função que verifica se a pilha está vazia ou não.
-	Se estiver vazia retorna 1, senão 0.
-*/
-int pilha_vazia(pilha_t *p);
+// === Inicializa uma pilha ===
+void init_stack(stack_t *s);
 
-/*
-	Função que retorna o tamanho da pilha.
-*/
-int tamanho_pilha(pilha_t *p);
+// === Retorna 1 se a pilha está vazia, senão 0 ===
+int empty_stack(stack_t *s);
 
-/*
-	Retorna 1 se o empilhamento do elemento 'x' foi bem sucedido,
-	e 0 em caso contrário.
-*/
-int empilha(int x, pilha_t *p);
+// === Retorna o tamanho da pilha ===
+int stack_size(stack_t *s);
 
-/*
-	Retorna 1 se o desempilhamento foi bem sucedido,
-	e 0 em caso contrário.
-*/
-int desempilha(pilha_t *p);
+// === Empilha um elemento na pilha ===
+void push_stack(int x, stack_t *s);
 
-/*
-	Retorna o elemento do topo da pilha na variável 't'.
-	A função retorna 1 se a operação foi bem sucedida, e
-	0 em caso contrário.
-*/
-int topo(int *t, pilha_t *p);
+// === Desempilha um elemento da pilha ===
+int pop_stack(stack_t *s);
+
+// === Retorna o elemento no topo da pilha ===
+int top_stack(stack_t *s);
 
 #endif
