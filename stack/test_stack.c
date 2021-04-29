@@ -1,11 +1,6 @@
-/* 
-   Source file : 'teste_pilha.c'
-   Escrito por : Allan Cedric G.B. Alves da Silva
-   Profile : Aluno de graduação do curso de Ciência da Computação (UFPR)
-   GRR : 20190351
-*/
+// === Source file: test_stack.c ===
 
-#include "pilha.h"
+#include "stack.h"
 #include <stdlib.h>
 #include <time.h>
 
@@ -13,27 +8,27 @@ int main()
 {
     srand(time(NULL));
 
-    pilha_t pilha;
+    stack_t stack_1;
 
-    printf("\nInicializando pilha...\n");
-    inicializa_pilha(&pilha);
-    printf("Pilha inicializada com sucesso!\n\n");
-    int i, e;
-    for (i = 0; i < 10; i++)
+    printf("\nCreating 'stack_1'...\n");
+    init_stack(&stack_1);
+    printf("'stack_1' created successfully!\n\n");
+    
+    for (int i = 0, e; i < 10; i++)
     {
         e = rand() % 30;
-        printf("Empilhando %i...\n", e);
-        empilha(e, &pilha);
+        printf("Pushing %i...\n", e);
+        push_stack(e, &stack_1);
     }
-    printf("Tamanho atual da pilha: %i\n\n", tamanho_pilha(&pilha));
-    while (!pilha_vazia(&pilha))
+
+    printf("'stack_1' size: %i\n\n", stack_size(&stack_1));
+    while (!empty_stack(&stack_1))
     {
-        topo(&e, &pilha);
-        printf("Desempilhando %i...\n", e);
-        desempilha(&pilha);
+        printf("Popping %i...\n", top_stack(&stack_1));
+        pop_stack(&stack_1);
     }
-    printf("PILHA ESTÁ VAZIA!\n");
-    printf("Tamanho atual da pilha: %i\n\n", tamanho_pilha(&pilha));
+    printf("Stack is empty!\n");
+    printf("'stack_' size: %i\n\n", stack_size(&stack_1));
 
     return 0;
 }
