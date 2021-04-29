@@ -12,7 +12,7 @@
 
 ```sh
 make
-./main
+./test_linked_list
 ```
 
 ## Como usar a biblioteca ?
@@ -25,7 +25,7 @@ int main()
     ...
 
     linked_list_t list; # Instância de uma lista.
-    init_list(&list)    # Inicializa a lista.
+    init_list(&list);   # Inicializa a lista.
     
     ...
     return 0;
