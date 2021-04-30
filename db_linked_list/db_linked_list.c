@@ -30,7 +30,7 @@ void init_db_list(db_linked_list_t *l)
 
 int empty_db_list(db_linked_list_t *l)
 {
-	if(destroyed_db_list(l))
+	if (destroyed_db_list(l))
 		return 0;
 	return (l->init->next == l->end);
 }
@@ -89,7 +89,8 @@ void add_now_db_list(db_linked_list_t *l)
 	if (empty_db_list(l) || destroyed_db_list(l))
 		return;
 
-	l->now = (l->now == l->end ? NULL : l->now->next);
+	if (l->now != l->end)
+		l->now = l->now->next;
 }
 
 void sub_now_db_list(db_linked_list_t *l)
@@ -97,7 +98,8 @@ void sub_now_db_list(db_linked_list_t *l)
 	if (empty_db_list(l) || destroyed_db_list(l))
 		return;
 
-	l->now = (l->now == l->init ? NULL : l->now->before);
+	if (l->now != l->init)
+		l->now = l->now->before;
 }
 
 void push_front_db_list(int item, db_linked_list_t *l)
@@ -253,13 +255,10 @@ int in_db_list(int item, db_linked_list_t *l)
 	while (l->now->key != item)
 		add_now_db_list(l);
 
-	if (l->now != l->end)
-	{
-		init_now_begin_db_list(l);
-		return 1;
-	}
+	node_t *cmp = l->now;
 	init_now_begin_db_list(l);
-	return 0;
+
+	return (cmp != l->end);
 }
 
 void print_db_list(db_linked_list_t *l)
@@ -335,8 +334,8 @@ void sort_db_list(db_linked_list_t *l)
 		pop_front_db_list(&key, l);
 		push_inorder_db_list(key, &aux);
 	}
-	init_now_begin_db_list(l);
 	concatenate_db_lists(l, &aux);
+	init_now_begin_db_list(l);
 }
 
 void merge_db_lists(db_linked_list_t *l, db_linked_list_t *c, db_linked_list_t *i)
