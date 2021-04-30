@@ -1,301 +1,366 @@
-/* 
-  Source file : 'lista_dupla.c'
-  Escrito por : Allan Cedric G.B. Alves da Silva
-  Profile : Aluno de graduação do curso de Ciência da Computação (UFPR)
-  GRR : 20190351
-*/
+// === Source file: db_linked_list.c ===
 
-#include "lista_dupla.h"
+#include "db_linked_list.h"
 
-int inicializa_lista(t_lista *l)
+void init_db_list(db_linked_list_t *l)
 {
+	node_t *sent_init, *sent_end;
 
-	t_nodo *sent_ini, *sent_fim;
+	sent_init = (node_t *)malloc(sizeof(node_t));
+	sent_end = (node_t *)malloc(sizeof(node_t));
 
-	sent_ini = (t_nodo *)malloc(sizeof(t_nodo));
-	sent_fim = (t_nodo *)malloc(sizeof(t_nodo));
+	if (!sent_init || !sent_end)
+	{
+		fprintf(stderr, "Memory allocation error!\n");
+		exit(1);
+	}
 
-	if (sent_ini == NULL || sent_fim == NULL)
-		return 0;
+	l->init = sent_init;
+	l->end = sent_end;
 
-	l->ini = sent_ini;
-	l->fim = sent_fim;
+	sent_init->before = NULL;
+	sent_init->next = sent_end;
 
-	sent_ini->prev = NULL;
-	sent_ini->prox = sent_fim;
+	sent_end->before = sent_init;
+	sent_end->next = NULL;
 
-	sent_fim->prev = sent_ini;
-	sent_fim->prox = NULL;
-
-	l->atual = NULL;
-	l->tamanho = 0;
-
-	return 1;
+	l->now = NULL;
+	l->size = 0;
 }
 
-int lista_vazia(t_lista *l)
+int empty_db_list(db_linked_list_t *l)
 {
-	return (l->ini->prox == l->fim);
+	return (l->init->next == l->end);
 }
 
-/* Verifica se a lista esta destruida */
-int lista_destruida(t_lista *l)
+int destroyed_db_list(db_linked_list_t *l)
 {
-	return (l->ini == NULL);
+	return (l->init == NULL);
 }
 
-int tamanho_lista(int *tam, t_lista *l)
+void destroy_db_list(db_linked_list_t *l)
 {
-
-	*tam = l->tamanho;
-	return 1;
-}
-
-int inicializa_atual_inicio(t_lista *l)
-{
-
-	if (lista_vazia(l) || lista_destruida(l))
-		return 0;
-	l->atual = l->ini->prox;
-	return 1;
-}
-
-int inicializa_atual_fim(t_lista *l)
-{
-
-	if (lista_vazia(l) || lista_destruida(l))
-		return 0;
-	l->atual = l->fim->prev;
-	return 1;
-}
-
-void incrementa_atual(t_lista *l)
-{
-
-	if (lista_vazia(l) || lista_destruida(l))
+	if (destroyed_db_list(l))
 		return;
 
-	if (l->atual == l->fim)
-		l->atual = NULL;
-	else
-		l->atual = l->atual->prox;
+	while (!(empty_db_list(l)))
+	{
+		init_now_begin_db_list(l);
+
+		l->init->next = l->now->next;
+		l->now->next->before = l->init;
+
+		free(l->now);
+	}
+
+	free(l->init);
+	free(l->end);
+
+	l->init = NULL;
+	l->now = NULL;
+	l->end = NULL;
+
+	l->size = 0;
 }
 
-void decrementa_atual(t_lista *l)
+int db_list_size(db_linked_list_t *l)
 {
+	return l->size;
+}
 
-	if (lista_vazia(l) || lista_destruida(l))
+void init_now_begin_db_list(db_linked_list_t *l)
+{
+	if (empty_db_list(l) || destroyed_db_list(l))
+		return;
+	l->now = l->init->next;
+}
+
+void init_now_end_db_list(db_linked_list_t *l)
+{
+	if (empty_db_list(l) || destroyed_db_list(l))
+		return;
+	l->now = l->end->before;
+}
+
+void add_now_db_list(db_linked_list_t *l)
+{
+	if (empty_db_list(l) || destroyed_db_list(l))
 		return;
 
-	if (l->atual == l->ini)
-		l->atual = NULL;
+	l->now = (l->now == l->end ? NULL : l->now->next);
+}
+
+void sub_now_db_list(db_linked_list_t *l)
+{
+	if (empty_db_list(l) || destroyed_db_list(l))
+		return;
+
+	l->now = (l->now == l->init ? NULL : l->now->before);
+}
+
+void push_front_db_list(int item, db_linked_list_t *l)
+{
+	if (destroyed_db_list(l))
+		return;
+
+	node_t *element = (node_t *)malloc(sizeof(node_t));
+
+	if (!element)
+	{
+		fprintf(stderr, "Memory allocation error!\n");
+		exit(1);
+	}
+
+	element->key = item;
+	element->before = l->init;
+	element->next = l->init->next;
+
+	l->init->next->before = element;
+	l->init->next = element;
+
+	l->size++;
+}
+
+void push_back_db_list(int item, db_linked_list_t *l)
+{
+	if (destroyed_db_list(l))
+		return;
+
+	node_t *element = (node_t *)malloc(sizeof(node_t));
+
+	if (!element)
+	{
+		fprintf(stderr, "Memory allocation error!\n");
+		exit(1);
+	}
+
+	element->key = item;
+	element->before = l->end->before;
+	element->next = l->end;
+
+	l->end->before->next = element;
+	l->end->before = element;
+
+	l->size++;
+}
+
+void push_inorder_db_list(int item, db_linked_list_t *l)
+{
+	if (destroyed_db_list(l))
+		return;
+
+	if (empty_db_list(l))
+		push_front_db_list(item, l);
 	else
-		l->atual = l->atual->prev;
+	{
+		node_t *element = (node_t *)malloc(sizeof(node_t));
+
+		if (!element)
+		{
+			fprintf(stderr, "Memory allocation error!\n");
+			exit(1);
+		}
+
+		element->key = item;
+		init_now_begin_db_list(l);
+
+		while ((l->now != l->end) && (item >= l->now->key))
+			add_now_db_list(l);
+
+		element->next = l->now->before->next;
+		element->before = l->now->before;
+
+		l->now->before->next = element;
+		l->now->before = element;
+
+		l->size++;
+	}
 }
 
-int consulta_item_atual(int *item, t_lista *l)
+void pop_front_db_list(int *item, db_linked_list_t *l)
 {
+	if (empty_db_list(l) || destroyed_db_list(l))
+		return;
 
-	if (lista_vazia(l) || lista_destruida(l))
-		return 0;
+	init_now_begin_db_list(l);
+	*item = l->now->key;
 
-	*item = l->atual->chave;
-	return 1;
+	l->init->next = l->now->next;
+	l->now->next->before = l->init;
+
+	free(l->now);
+
+	l->size--;
 }
 
-int remove_item_atual(int *item, t_lista *l)
+void pop_back_db_list(int *item, db_linked_list_t *l)
 {
+	if (empty_db_list(l) || destroyed_db_list(l))
+		return;
 
-	if (lista_vazia(l) || lista_destruida(l))
-		return 0;
+	init_now_end_db_list(l);
+	*item = l->now->key;
 
-	t_nodo *aux; /* Ponteiro auxiliar para dar 'free' */
+	l->now->next->before = l->now->before;
+	l->now->before->next = l->end;
 
-	aux = l->atual;
+	free(l->now);
 
-	*item = l->atual->chave;
+	l->size--;
+}
 
-	l->atual->prev->prox = l->atual->prox;
-	l->atual->prox->prev = l->atual->prev;
+void pop_now_db_list(int *item, db_linked_list_t *l)
+{
+	if (empty_db_list(l) || destroyed_db_list(l))
+		return;
 
-	incrementa_atual(l);
+	node_t *aux = l->now;
 
-	(l->tamanho)--;
+	*item = l->now->key;
+
+	l->now->before->next = l->now->next;
+	l->now->next->before = l->now->before;
+
+	add_now_db_list(l);
+
+	l->size--;
 
 	free(aux);
-
-	return 1;
 }
 
-int insere_inicio_lista(int item, t_lista *l)
+void check_now_key_db_list(int *item, db_linked_list_t *l)
 {
-
-	if (lista_destruida(l))
-		return 0;
-
-	t_nodo *elemento;
-
-	elemento = (t_nodo *)malloc(sizeof(t_nodo));
-
-	if (elemento == NULL)
-		return 0;
-
-	elemento->chave = item;
-	elemento->prev = l->ini;	   /* Aponta para o NODO SENTINELA do inicio */
-	elemento->prox = l->ini->prox; /* Aponta para o SEGUNDO NODO da lista */
-
-	l->ini->prox->prev = elemento;
-	l->ini->prox = elemento;
-
-	(l->tamanho)++;
-
-	return 1;
-}
-
-int insere_fim_lista(int item, t_lista *l)
-{
-
-	if (lista_destruida(l))
-		return 0;
-
-	t_nodo *elemento;
-
-	elemento = (t_nodo *)malloc(sizeof(t_nodo));
-
-	if (elemento == NULL)
-		return 0;
-
-	elemento->chave = item;
-	elemento->prev = l->fim->prev; /*Aponta para o ULTIMO NODO da lista passada */
-	elemento->prox = l->fim;	   /* Aponta para o NODO SENTINELA do fim */
-
-	l->fim->prev->prox = elemento;
-	l->fim->prev = elemento;
-
-	(l->tamanho)++;
-
-	return 1;
-}
-
-int insere_ordenado_lista(int item, t_lista *l)
-{
-
-	if (lista_destruida(l))
-		return 0;
-
-	if (lista_vazia(l))
-		return (insere_inicio_lista(item, l));
-	else
-	{
-
-		t_nodo *elemento;
-
-		elemento = (t_nodo *)malloc(sizeof(t_nodo));
-
-		if (elemento == NULL)
-			return 0;
-
-		elemento->chave = item;
-		inicializa_atual_inicio(l);
-
-		while ((l->atual != l->fim) && (item >= l->atual->chave)) /* Ordenação por sentinela */
-			incrementa_atual(l);
-
-		elemento->prox = l->atual->prev->prox;
-		elemento->prev = l->atual->prev;
-
-		l->atual->prev->prox = elemento;
-		l->atual->prev = elemento;
-
-		(l->tamanho)++;
-	}
-
-	return 1;
-}
-
-int remove_inicio_lista(int *item, t_lista *l)
-{
-
-	if (lista_vazia(l) || lista_destruida(l))
-		return 0;
-
-	inicializa_atual_inicio(l);
-	*item = l->atual->chave;
-
-	l->ini->prox = l->atual->prox;
-	l->atual->prox->prev = l->ini;
-
-	free(l->atual);
-	l->atual = NULL;
-
-	(l->tamanho)--;
-
-	return 1;
-}
-
-int remove_fim_lista(int *item, t_lista *l)
-{
-
-	if (lista_vazia(l) || lista_destruida(l))
-		return 0;
-
-	inicializa_atual_fim(l);
-	*item = l->atual->chave;
-
-	l->atual->prox->prev = l->atual->prev;
-	l->atual->prev->prox = l->fim;
-
-	free(l->atual);
-	l->atual = NULL;
-
-	(l->tamanho)--;
-
-	return 1;
-}
-
-int pertence_lista(int chave, t_lista *l)
-{
-
-	if (lista_vazia(l) || lista_destruida(l))
-		return 0;
-
-	inicializa_atual_inicio(l);
-
-	l->fim->chave = chave;
-
-	while (l->atual->chave != chave) /* Busca por sentinela */
-		incrementa_atual(l);
-
-	if (l->atual != l->fim)
-		return 1;
-
-	return 0;
-}
-
-void destroi_lista(t_lista *l)
-{
-
-	if (lista_destruida(l))
+	if (empty_db_list(l) || destroyed_db_list(l))
 		return;
 
-	while (!(lista_vazia(l)))
+	*item = l->now->key;
+}
+
+int in_db_list(int item, db_linked_list_t *l)
+{
+	if (empty_db_list(l) || destroyed_db_list(l))
+		return 0;
+
+	init_now_begin_db_list(l);
+
+	l->end->key = item;
+
+	while (l->now->key != item)
+		add_now_db_list(l);
+
+	return (l->now != l->end);
+}
+
+void print_db_list(db_linked_list_t *l)
+{
+	if (destroyed_db_list(l) || empty_db_list(l))
+		return;
+
+	init_now_begin_db_list(l);
+
+	while (l->now != l->end)
 	{
+		printf("%d ", l->now->key);
+		add_now_db_list(l);
+	}
+	printf("\n");
+}
 
-		inicializa_atual_inicio(l);
+void copy_db_list(db_linked_list_t *l, db_linked_list_t *c)
+{
+	if (destroyed_db_list(l) || empty_db_list(l))
+		return;
 
-		l->ini->prox = l->atual->prox;
-		l->atual->prox->prev = l->ini;
-
-		free(l->atual);
+	if (!empty_db_list(c))
+	{
+		destroy_db_list(c);
+		init_db_list(c);
 	}
 
-	/* Libera memória dos SENTINELAS */
-	free(l->ini);
-	free(l->fim);
+	init_now_begin_db_list(l);
 
-	l->ini = NULL;
-	l->atual = NULL;
-	l->fim = NULL;
+	while (l->now != l->end)
+	{
+		push_back_db_list(l->now->key, c);
+		add_now_db_list(l);
+	}
+	c->size = l->size;
+}
 
-	l->tamanho = 0;
+void concatenate_db_lists(db_linked_list_t *l, db_linked_list_t *c)
+{
+	if (destroyed_db_list(l) || destroyed_db_list(c) || empty_db_list(c))
+		return;
+
+	l->end->before->next = c->init->next;
+	c->init->next->before = l->end->before;
+
+	free(l->end);
+	free(c->init);
+
+	l->end = c->end;
+	c->end = NULL;
+
+	l->size += c->size;
+	c->size = 0;
+}
+
+void sort_db_list(db_linked_list_t *l)
+{
+	if (destroyed_db_list(l) || empty_db_list(l))
+		return;
+
+	db_linked_list_t aux;
+
+	init_db_list(&aux);
+
+	while (!empty_db_list(l))
+	{
+		int key;
+		pop_front_db_list(&key, l);
+		push_inorder_db_list(key, &aux);
+	}
+
+	concatenate_db_lists(l, &aux);
+}
+
+void merge_db_lists(db_linked_list_t *l, db_linked_list_t *c, db_linked_list_t *i)
+{
+	if ((empty_db_list(l) && empty_db_list(c)) || !(empty_db_list(i)))
+		return;
+
+	if (destroyed_db_list(l) || destroyed_db_list(c))
+		return;
+
+	sort_db_list(l);
+	sort_db_list(c);
+
+	init_now_begin_db_list(l);
+	init_now_begin_db_list(c);
+
+	while ((l->now != l->end) && (c->now != c->end))
+	{
+		if (l->now->key < c->now->key)
+		{
+			push_back_db_list(l->now->key, i);
+			add_now_db_list(l);
+		}
+		else
+		{
+			push_back_db_list(c->now->key, i);
+			add_now_db_list(c);
+		}
+	}
+
+	while (l->now != l->end)
+	{
+		push_back_db_list(l->now->key, i);
+		add_now_db_list(l);
+	}
+
+	while (c->now != c->end)
+	{
+		push_back_db_list(c->now->key, i);
+		add_now_db_list(c);
+	}
 }

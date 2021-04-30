@@ -1,141 +1,96 @@
-/* 
-  Header file : 'lista_dupla.h'
-  Escrito por : Allan Cedric G.B. Alves da Silva
-  Profile : Aluno de graduação do curso de Ciência da Computação (UFPR)
-  GRR : 20190351
-*/
+// === Header file: db_linked_list.h ===
 
-#ifndef __LISTA_DUPLA_H__
-#define __LISTA_DUPLA_H__
+#ifndef __DB_LINKED_LIST_H__
+#define __DB_LINKED_LIST_H__
 
+// === Bibliotecas ===
 #include <stdio.h>
 #include <stdlib.h>
 
-struct t_nodo
+// === Estrutura de dados de um nodo com chave inteira ===
+typedef struct node_t
 {
-  int chave;
-  struct t_nodo *prox;
-  struct t_nodo *prev;
-};
-typedef struct t_nodo t_nodo;
+  int key;
+  struct node_t *before, *next;
+} node_t;
 
-struct t_lista
+// === Estrutura de dados: Doubly Linked List ===
+typedef struct db_linked_list_t
 {
-  t_nodo *ini;
-  t_nodo *atual;
-  t_nodo *fim;
-  int tamanho;
-};
-typedef struct t_lista t_lista;
+  node_t *init, *now, *end;
+  int size;
+} db_linked_list_t;
 
-/*
-  Cria uma lista vazia. Ela eh duplamente encadeada e tem sentinelas no
-  inicio e no final. Tambem tem um apontador para um elemento qualquer.
-*/
-int inicializa_lista(t_lista *l);
+// === Inicializa uma lista duplamente encadeada ===
+// Haverá a criação de dois nodos especiais:
+// Sentinela de início && Sentinela de fim.
+// Esses dois nodos facilitam algumas operações, como inserção e busca.
+void init_db_list(db_linked_list_t *l);
 
-/*
-  Retorna 1 se a lista está vazia e zero caso contrário.
-*/
-int lista_vazia(t_lista *l);
+// === Retorna 1 se a lista está vazia, senão 0 ===
+int empty_db_list(db_linked_list_t *l);
 
-/*
-  Retorna 1 se a lista está destruida e zero caso contrário
-*/
-int lista_destruida(t_lista *l);
+// === Retorna 1 se a lista está completamente destruída, senão 0 ===
+int destroyed_db_list(db_linked_list_t *l);
 
-/*
-  Remove todos os elementos da lista e faz com que ela aponte para NULL.
-*/
-void destroi_lista(t_lista *l);
+// === Destrói uma lista ===
+void destroy_db_list(db_linked_list_t *l);
 
-/*
-  Insere o elemento item no início da lista.
-  Retorna 1 se a operação foi bem sucedida e zero caso contrário.
-*/
-int insere_inicio_lista(int item, t_lista *l);
+// === Retorna o tamanho da lista ===
+int db_list_size(db_linked_list_t *l);
 
-/*
-  Retorna o tamanho da lista em *tam.
-  Retorna 1 se a operação foi bem sucedida e zero caso contrário.
-*/
-int tamanho_lista(int *tam, t_lista *l);
+// === Aponta o ponteiro *now para o primeiro elemento da lista ===
+void init_now_begin_db_list(db_linked_list_t *l);
 
-/*
-  Insere o elemento item no final da lista.
-  Retorna 1 se a operação foi bem sucedida e zero caso contrário.
-*/
-int insere_fim_lista(int item, t_lista *l);
+// === Aponta o ponteiro *now para o último elemento da lista ===
+void init_now_end_db_list(db_linked_list_t *l);
 
-/*
-  Insere o elemento item na lista de maneira que ela fique em ordem
-  crescente, do início para o final dela.
-  Retorna 1 se a operação foi bem sucedida e zero caso contrário.
-*/
-int insere_ordenado_lista(int item, t_lista *l);
+// === Aponta o ponteiro *now para o próximo elemento apontado por ele ===
+void add_now_db_list(db_linked_list_t *l);
 
-/*
-  Remove o primeiro elemento da lista e o retorna em *item.
-  Retorna 1 se a operação foi bem sucedida e zero caso contrário.
-*/
-int remove_inicio_lista(int *item, t_lista *l);
+// === Aponta o ponteiro *now para o elemento anterior apontado por ele ===
+void sub_now_db_list(db_linked_list_t *l);
 
-/*
-  Remove o último elemento da lista e o retorna em *item.
-  Retorna 1 se a operação foi bem sucedida e zero caso contrário.
-*/
-int remove_fim_lista(int *item, t_lista *l);
+// === Insere um elemento no início da lista ===
+void push_front_db_list(int item, db_linked_list_t *l);
 
-/*
-  Se o elemento chave existir na lista, o retorna em *item.
-  Retorna 1 se a operação foi bem sucedida e zero caso contrário
-  (elemento não encontrado também retorna zero).
-*/
-int remove_item_lista(int chave, int *item, t_lista *l);
+// === Insere um elemento no final da lista ===
+void push_back_db_list(int item, db_linked_list_t *l);
 
-/*
-  Retorna 1 se o elemento contendo a chave chave existe na lista,
-  caso contrário retorna zero.
-*/
-int pertence_lista(int chave, t_lista *l);
+// === Insere um elemento na lista de forma ordenada ===
+void push_inorder_db_list(int item, db_linked_list_t *l);
 
-/* 
-  Inicializa o ponteiro atual para o primeiro elemento da lista.
-  Retorna 1 se a operação foi bem sucedida e zero caso contrário.
-*/
-int inicializa_atual_inicio(t_lista *l);
+// === Remove o primeiro elemento da lista ===
+// Retorna o valor removido em (int *item).
+void pop_front_db_list(int *item, db_linked_list_t *l);
 
-/* 
-  Inicializa o ponteiro atual para o ultimo elemento da lista.
-  Retorna 1 se a operação foi bem sucedida e zero caso contrário.
-*/
-int inicializa_atual_fim(t_lista *l);
+// === Remove o último elemento da lista ===
+// Retorna o valor removido em (int *item).
+void pop_back_db_list(int *item, db_linked_list_t *l);
 
-/*
-  Faz o ponteiro atual apontar para o próximo nodo da lista l e retorna 
-  este ponteiro. Se atual estiver apontando para o último, isto é, não 
-  tem próximo, retorna NULL.
-*/
-void incrementa_atual(t_lista *l);
+// === Remove o elemento apontado por *now ===
+// Retorna o valor removido em (int *item).
+void pop_now_db_list(int *item, db_linked_list_t *l);
 
-/*
-  Faz o ponteiro atual apontar para o nodo anterior da lista l e retorna 
-  este ponteiro. Se atual estiver apontando para o primeiro, isto é, não 
-  tem anterior, retorna NULL.
-*/
-void decrementa_atual(t_lista *l);
+// === Retorna a chave do elemento apontado por *now em (int *item) ===
+void check_now_key_db_list(int *item, db_linked_list_t *atual);
 
-/*
-  Retorna em *item o valor contido na chave apontada pelo ponteiro atual. 
-  Se atual não for válido a função retorna zero senão retorna 1.
-*/
-int consulta_item_atual(int *item, t_lista *atual);
+// === Retorna 1 se a chave foi encontrada, senão 0. ===
+int in_db_list(int item, db_linked_list_t *l);
 
-/*
-  Remove o elemento apontado por atual da lista l e o retorna em *item.
-  Faz o atual apontar para o sucessor do nodo removido.
-  Retorna 1 se houve sucesso e zero caso contrário.
-*/
-int remove_item_atual(int *item, t_lista *l);
+// === Imprime toda a lista ===
+void print_db_list(db_linked_list_t *l);
+
+// === Copia a lista 'l' na lista 'c' ===
+void copy_db_list(db_linked_list_t *l, db_linked_list_t *c);
+
+// === Concatena a lista 'c' na lista 'l', a lista 'c' depois é destruída ===
+void concatenate_db_lists(db_linked_list_t *l, db_linked_list_t *c);
+
+// === Ordenada uma lista 'l' ===
+void sort_db_list(db_linked_list_t *l);
+
+// === Gera uma lista 'i' que é resultado da intercalação de uma lista 'l' com uma lista 'm' ===
+void merge_db_lists(db_linked_list_t *l, db_linked_list_t *m, db_linked_list_t *i);
 
 #endif
