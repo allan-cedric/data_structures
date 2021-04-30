@@ -175,6 +175,7 @@ void push_inorder_db_list(int item, db_linked_list_t *l)
 
 		l->size++;
 	}
+	init_now_begin_db_list(l);
 }
 
 void pop_front_db_list(int *item, db_linked_list_t *l)
@@ -191,6 +192,7 @@ void pop_front_db_list(int *item, db_linked_list_t *l)
 	free(l->now);
 
 	l->size--;
+	init_now_begin_db_list(l);
 }
 
 void pop_back_db_list(int *item, db_linked_list_t *l)
@@ -207,6 +209,7 @@ void pop_back_db_list(int *item, db_linked_list_t *l)
 	free(l->now);
 
 	l->size--;
+	init_now_begin_db_list(l);
 }
 
 void pop_now_db_list(int *item, db_linked_list_t *l)
@@ -248,7 +251,13 @@ int in_db_list(int item, db_linked_list_t *l)
 	while (l->now->key != item)
 		add_now_db_list(l);
 
-	return (l->now != l->end);
+	if (l->now != l->end)
+	{
+		init_now_begin_db_list(l);
+		return 1;
+	}
+	init_now_begin_db_list(l);
+	return 0;
 }
 
 void print_db_list(db_linked_list_t *l)
@@ -264,6 +273,8 @@ void print_db_list(db_linked_list_t *l)
 		add_now_db_list(l);
 	}
 	printf("\n");
+
+	init_now_begin_db_list(l);
 }
 
 void copy_db_list(db_linked_list_t *l, db_linked_list_t *c)
@@ -285,6 +296,8 @@ void copy_db_list(db_linked_list_t *l, db_linked_list_t *c)
 		add_now_db_list(l);
 	}
 	c->size = l->size;
+
+	init_now_begin_db_list(l);
 }
 
 void concatenate_db_lists(db_linked_list_t *l, db_linked_list_t *c)
@@ -320,7 +333,7 @@ void sort_db_list(db_linked_list_t *l)
 		pop_front_db_list(&key, l);
 		push_inorder_db_list(key, &aux);
 	}
-
+	init_now_begin_db_list(l);
 	concatenate_db_lists(l, &aux);
 }
 
@@ -363,4 +376,7 @@ void merge_db_lists(db_linked_list_t *l, db_linked_list_t *c, db_linked_list_t *
 		push_back_db_list(c->now->key, i);
 		add_now_db_list(c);
 	}
+
+	init_now_begin_db_list(l);
+	init_now_begin_db_list(c);
 }
