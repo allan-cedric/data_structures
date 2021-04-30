@@ -90,7 +90,7 @@ void concatenate_db_lists(db_linked_list_t *l, db_linked_list_t *c);
 // === Ordenada uma lista 'l' ===
 void sort_db_list(db_linked_list_t *l);
 
-// === Gera uma lista 'i' que é resultado da intercalação de uma lista 'l' com uma lista 'm' ===
-void merge_db_lists(db_linked_list_t *l, db_linked_list_t *m, db_linked_list_t *i);
+// === Gera uma lista 'i' que é resultado da intercalação de uma lista 'l' com uma lista 'c' ===
+void merge_db_lists(db_linked_list_t *l, db_linked_list_t *c, db_linked_list_t *i);
 
 #endif
