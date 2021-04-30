@@ -30,6 +30,8 @@ void init_db_list(db_linked_list_t *l)
 
 int empty_db_list(db_linked_list_t *l)
 {
+	if(destroyed_db_list(l))
+		return 0;
 	return (l->init->next == l->end);
 }
 
