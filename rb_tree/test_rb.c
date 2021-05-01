@@ -1,3 +1,5 @@
+// === Source file: test_rb.c ===
+
 #include "rb.h"
 
 int main()
