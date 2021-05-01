@@ -1,7 +1,25 @@
-## Estruturas de dados:
+# Implementações das principais estruturas de dados ![C_Logo](https://img.icons8.com/color/48/000000/c-programming.png)
 
-    - Pilha
-    - Lista simples
-    - Lista duplamente encadeada (*Sem teste, mas posso garantir que funciona)
-    - Árvore Binária de Busca (BST)
-    - Árvore Adelson-Velsky e Landis (AVL)
+## Pilhas
+
+-[x] `Pilha dinâmica simples (Stack)`
+
+## Listas
+
+-[x] `Lista ligada simples (Linked List)`
+-[x] `Lista ligada duplamente encadeada (Doubly Linked List)`
+
+## Árvores
+
+# Binárias
+
+-[x] `Árvore Binária de Busca simples (BST)`
+-[x] `Árvore AVL (AVL Tree)`
+-[ ] `Árvore Rubro-Negra (Red-Black Tree)`
+
+## Projetos futuros
+
+*   Fila dinâmica simples
+*   Árvore B
+*   Árvore B+
+*   Árvores digitais
