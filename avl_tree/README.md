@@ -1,26 +1,40 @@
-## Árvore Adelson-Velsky e Landis (AVL):
-### Arquivos:
-    - Header file: avl.h
-        
-    - Source file: avl.c
-        
-    - *Source file: teste_avl.c
-        
-    - E um 'makefile'
-            
-    *Arquivo p/ demonstrar o funcionamento de uma árvore AVL.
-### Operações fundamentais completas :) :
-    - Inserção (com balanceamento)
-    - Remoção  (com balanceamento)
-    - Busca
-    - Mínimo
-    - Máximo
-    - Destruição
-    - Impressão (inOrder, preOrder, posOrder)
-    - Rotações
-    - E muito mais...
-    
-### Compilação:
-    No terminal: make
-### Como executar ?
-    No terminal: ./teste_avl
+# Estrutura de dados: Adelson-Velsky and Landis Tree (AVL) (Árvore AVL)
+
+## Arquivos do projeto
+
+*   `avl.h && avl.c`: Biblioteca que implementa a estrutura de dados.
+
+*   `test_avl.c`: Programa principal para testar as operações da estrutura de dados.
+
+*   `makefile`: Arquivo para compilação da biblioteca e do programa principal.
+
+## Compilação e teste padrão
+
+```sh
+make
+./test_avl
+```
+
+## Como usar a biblioteca ?
+
+```C
+#include "avl.h"
+
+int main()
+{
+    ...
+
+    AVL *rootAVL = createAVL(); # Instância de uma árvore.
+
+    ...
+    return 0;
+}
+```
+
+## Principais operações implementadas
+
+*   Inserção / Busca / Remoção
+
+*   Mínimo / Máximo / Altura
+
+*   Impressão: preOrder; inOrder && posOrder

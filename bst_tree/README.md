@@ -24,7 +24,7 @@ int main()
 {
     ...
 
-    BST *rootBst = createBST(); # Instância de uma lista.
+    BST *rootBst = createBST(); # Instância de uma árvore.
 
     ...
     return 0;
