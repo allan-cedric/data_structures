@@ -1,18 +1,14 @@
 CC=gcc
-CFLAGS=-ansi -Wall
-OBJ=avl.o teste_avl.o
-EXEC=teste_avl
+CFLAGS=-Wextra -Wall -g
+OBJ=avl.o test_avl.o
+EXEC=test_avl
 
-all: teste_avl clean
+all: $(EXEC) 
 
-teste_avl: $(OBJ)
-	$(CC) $(OBJ) -o $(EXEC) $(CFLAGS)
+$(EXEC): $(OBJ)
 
 avl.o: avl.h avl.c
-	$(CC) -c avl.c $(CFLAGS)
-
-teste_avl.o: avl.h avl.c
-	$(CC) -c teste_avl.c $(CFLAGS)
+test_avl.o: avl.h test_avl.c
 
 clean:
 	-rm -f $(OBJ) *~
