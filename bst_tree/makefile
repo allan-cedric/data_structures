@@ -1,18 +1,14 @@
 CC=gcc
-CFLAGS=-ansi -Wall
-OBJ=bst.o teste_bst.o
-EXEC=teste_bst
+CFLAGS=-Wextra -Wall -g
+OBJ=bst.o test_bst.o
+EXEC=test_bst
 
-all: teste_bst clean
+all: $(EXEC) 
 
-teste_bst: $(OBJ)
-	$(CC) $(OBJ) -o $(EXEC) $(CFLAGS)
+$(EXEC): $(OBJ)
 
 bst.o: bst.h bst.c
-	$(CC) -c bst.c $(CFLAGS)
-
-teste_bst.o: bst.h bst.c
-	$(CC) -c teste_bst.c $(CFLAGS)
+test_bst.o: bst.h test_bst.c
 
 clean:
 	-rm -f $(OBJ) *~
