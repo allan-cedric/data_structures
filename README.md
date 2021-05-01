@@ -1,4 +1,5 @@
-# Estruturas de dados em ![C_Logo](https://img.icons8.com/color/48/000000/c-programming.png)
+# Estruturas de dados
+![C_logo](https://img.icons8.com/color/48/000000/c-programming.png)
 
 ## Pilhas
 
@@ -12,7 +13,7 @@
 
 ## Árvores
 
-# Binárias
+### Binárias
 
 - [x] `Árvore Binária de Busca simples (BST)`
  
