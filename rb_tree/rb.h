@@ -30,7 +30,7 @@ RBTree *createRBTree();
 int emptyRBTree(RBTree *root);
 
 // === Cria um novo nodo para uma Red-Black Tree ===
-// Retorna um ponteiro para nodo.
+// Retorna um ponteiro para o nodo criado.
 RBTree *newNode(int key);
 
 // === Destrói uma Red-Black Tree ===
@@ -44,10 +44,10 @@ void printRBTree(RBTree *root, const char *op);
 // Retorna um ponteiro para o nodo encontrado, senão NULL.
 RBTree *searchRBTree(RBTree *root, int key);
 
-// === Retorna um ponteiro para nodo com o menor elemento ===
+// === Retorna um ponteiro para o nodo com o menor elemento ===
 RBTree *minRBTree(RBTree *root);
 
-// === Retorna um ponteiro para nodo com o maior elemento ===
+// === Retorna um ponteiro para o nodo com o maior elemento ===
 RBTree *maxRBTree(RBTree *root);
 
 // === Rotação para direita (Caso Esquerda-Esquerda) ===
