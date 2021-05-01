@@ -1,4 +1,7 @@
 # Estruturas de dados
+
+## Linguagem
+
 ![C_logo](https://img.icons8.com/color/48/000000/c-programming.png)
 
 ## Pilhas
