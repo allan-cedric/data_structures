@@ -2,19 +2,40 @@
 
 #include "rb.h"
 
-RBTree *createRBTree()
+void createRBTree(RBTree *rb)
 {
-    return NULL;
+    rb->nil = newNil();
+    rb->root = rb->nil;
 }
 
-int emptyRBTree(RBTree *root)
+int emptyRBTree(RBTree *rb)
 {
-    return (root == NULL);
+    return (rb->root == rb->nil);
 }
 
-RBTree *newNode(int key)
+RBTreeNode *newNil()
 {
-    RBTree *new = (RBTree *)malloc(sizeof(RBTree));
+    RBTreeNode *new = (RBTreeNode *)malloc(sizeof(RBTreeNode));
+
+    if (!new)
+    {
+        fprintf(stderr, "Memory allocation error!\n");
+        exit(1);
+    }
+
+    new->key = 0;
+    new->color = BLACK;
+
+    new->left = NULL;
+    new->right = NULL;
+    new->parent = NULL;
+
+    return new;
+}
+
+RBTreeNode *newNode(RBTree *rb, int key)
+{
+    RBTreeNode *new = (RBTreeNode *)malloc(sizeof(RBTreeNode));
 
     if (!new)
     {
@@ -25,44 +46,50 @@ RBTree *newNode(int key)
     new->key = key;
     new->color = RED;
 
-    new->left = NULL;
-    new->right = NULL;
-    new->parent = NULL;
+    new->left = rb->nil;
+    new->right = rb->nil;
+    new->parent = rb->nil;
 
     return new;
 }
 
-RBTree *destroyRBTree(RBTree *root)
+RBTreeNode *destroyNodesRBTree(RBTree *rb, RBTreeNode *root)
 {
-    if (root)
+    if (root != rb->nil)
     {
-        destroyRBTree(root->left);
-        destroyRBTree(root->right);
+        destroyNodesRBTree(rb, root->left);
+        destroyNodesRBTree(rb, root->right);
         free(root);
     }
     return NULL;
 }
 
-void printRBTree(RBTree *root, const char *op)
+void destroyRBTree(RBTree *rb)
 {
-    if (root)
+    rb->root = destroyNodesRBTree(rb, rb->root);
+    free(rb->nil);
+}
+
+void printRBTree(RBTree *rb, RBTreeNode *root, const char *op)
+{
+    if (root != rb->nil)
     {
         if (!strcmp(op, "pre"))
         {
             printf("(%i, %c)", root->key, root->color == RED ? 'R' : 'B');
-            printRBTree(root->left, op);
-            printRBTree(root->right, op);
+            printRBTree(rb, root->left, op);
+            printRBTree(rb, root->right, op);
         }
         else if (!strcmp(op, "in"))
         {
-            printRBTree(root->left, op);
+            printRBTree(rb, root->left, op);
             printf("(%i, %c)", root->key, root->color == RED ? 'R' : 'B');
-            printRBTree(root->right, op);
+            printRBTree(rb, root->right, op);
         }
         else if (!strcmp(op, "pos"))
         {
-            printRBTree(root->left, op);
-            printRBTree(root->right, op);
+            printRBTree(rb, root->left, op);
+            printRBTree(rb, root->right, op);
             printf("(%i, %c)", root->key, root->color == RED ? 'R' : 'B');
         }
         else
@@ -70,42 +97,42 @@ void printRBTree(RBTree *root, const char *op)
     }
 }
 
-RBTree *searchRBTree(RBTree *root, int key)
+RBTreeNode *searchRBTree(RBTree *rb, RBTreeNode *root, int key)
 {
-    if (!root || root->key == key)
+    if ((root == rb->nil) || (root->key == key))
         return root;
 
     if (key < root->key)
-        return searchRBTree(root->left, key);
-    return searchRBTree(root->right, key);
+        return searchRBTree(rb, root->left, key);
+    return searchRBTree(rb, root->right, key);
 }
 
-RBTree *minRBTree(RBTree *root)
+RBTreeNode *minRBTree(RBTree *rb, RBTreeNode *root)
 {
-    if (!root || !root->left)
+    if ((root == rb->nil) || (root->left == rb->nil))
         return root;
-    return minRBTree(root->left);
+    return minRBTree(rb, root->left);
 }
 
-RBTree *maxRBTree(RBTree *root)
+RBTreeNode *maxRBTree(RBTree *rb, RBTreeNode *root)
 {
-    if (!root || !root->right)
+    if ((root == rb->nil) || (root->right == rb->nil))
         return root;
-    return maxRBTree(root->right);
+    return maxRBTree(rb, root->right);
 }
 
-RBTree *LLRotationRBTree(RBTree *root, RBTree *node_x)
+void LLRotationRBTree(RBTree *rb, RBTreeNode *node_x)
 {
     // === Filho do node_y => Filho do node_x ===
-    RBTree *node_y = node_x->left;
+    RBTreeNode *node_y = node_x->left;
     node_x->left = node_y->right;
-    if (node_x->left)
+    if (node_x->left != rb->nil)
         node_x->left->parent = node_x;
-    node_y->parent = node_x->parent;
 
     // === Pai do node_x => Pai do node_y ===
-    if (!node_x->parent)
-        root = node_y;
+    node_y->parent = node_x->parent;
+    if (node_x->parent == rb->nil)
+        rb->root = node_y;
     else if (node_x == node_x->parent->left)
         node_x->parent->left = node_y;
     else
@@ -114,22 +141,20 @@ RBTree *LLRotationRBTree(RBTree *root, RBTree *node_x)
     // === Pai antigo do node_x => Pai novo (node_y) do node_x ===
     node_y->right = node_x;
     node_x->parent = node_y;
-
-    return root;
 }
 
-RBTree *RRRotationRBTree(RBTree *root, RBTree *node_x)
+void RRRotationRBTree(RBTree *rb, RBTreeNode *node_x)
 {
     // === Filho do node_y => Filho do node_x ===
-    RBTree *node_y = node_x->right;
+    RBTreeNode *node_y = node_x->right;
     node_x->right = node_y->left;
-    if (node_x->right)
+    if (node_x->right != rb->nil)
         node_x->right->parent = node_x;
-    node_y->parent = node_x->parent;
 
     // === Pai do node_x => Pai do node_y ===
-    if (!node_x->parent)
-        root = node_y;
+    node_y->parent = node_x->parent;
+    if (node_x->parent == rb->nil)
+        rb->root = node_y;
     else if (node_x == node_x->parent->left)
         node_x->parent->left = node_y;
     else
@@ -138,40 +163,38 @@ RBTree *RRRotationRBTree(RBTree *root, RBTree *node_x)
     // === Pai antigo do node_x => Pai novo (node_y) do node_x ===
     node_y->left = node_x;
     node_x->parent = node_y;
-
-    return root;
 }
 
-RBTree *insertRBTree(RBTree *root, int key)
+void insertRBTree(RBTree *rb, int key)
 {
-    RBTree *node_y = NULL, *node_x = root;
-    while (node_x)
+    RBTreeNode *node_y = rb->nil, *node_x = rb->root;
+    while (node_x != rb->nil)
     {
         node_y = node_x;
         if (key == node_x->key)
-            return root;
+            return;
         node_x = (key < node_x->key ? node_x->left : node_x->right);
     }
-    RBTree *new = newNode(key);
+    RBTreeNode *new = newNode(rb, key);
     new->parent = node_y;
-    if (!node_y)
-        root = new;
+    if (node_y == rb->nil)
+        rb->root = new;
     else if (key < node_y->key)
         node_y->left = new;
     else
         node_y->right = new;
 
-    return insertFixUpRBTree(root, new);
+    insertFixUpRBTree(rb, new);
 }
 
-RBTree *insertFixUpRBTree(RBTree *root, RBTree *new)
+void insertFixUpRBTree(RBTree *rb, RBTreeNode *new)
 {
-    while (new->parent && new->parent->color == RED)
+    while (new->parent->color == RED)
     {
         if (new->parent == new->parent->parent->left)
         {
-            RBTree *node_y = new->parent->parent->right;
-            if (node_y && node_y->color == RED) // Case 1
+            RBTreeNode *node_y = new->parent->parent->right;
+            if (node_y->color == RED) // Case 1
             {
                 new->parent->color = BLACK;
                 node_y->color = BLACK;
@@ -183,18 +206,18 @@ RBTree *insertFixUpRBTree(RBTree *root, RBTree *new)
                 if (new == new->parent->right) // Case 2
                 {
                     new = new->parent;
-                    root = RRRotationRBTree(root, new);
+                    RRRotationRBTree(rb, new);
                 }
                 // Case 3
                 new->parent->color = BLACK;
                 new->parent->parent->color = RED;
-                root = LLRotationRBTree(root, new->parent->parent);
+                LLRotationRBTree(rb, new->parent->parent);
             }
         }
         else
         {
-            RBTree *node_y = new->parent->parent->left;
-            if (node_y && node_y->color == RED) // Case 1
+            RBTreeNode *node_y = new->parent->parent->left;
+            if (node_y->color == RED) // Case 1
             {
                 new->parent->color = BLACK;
                 node_y->color = BLACK;
@@ -206,26 +229,25 @@ RBTree *insertFixUpRBTree(RBTree *root, RBTree *new)
                 if (new == new->parent->left) // Case 2
                 {
                     new = new->parent;
-                    root = LLRotationRBTree(root, new);
+                    LLRotationRBTree(rb, new);
                 }
                 // Case 3
                 new->parent->color = BLACK;
                 new->parent->parent->color = RED;
-                root = RRRotationRBTree(root, new->parent->parent);
+                RRRotationRBTree(rb, new->parent->parent);
             }
         }
     }
 
-    root->color = BLACK;
-    return root;
+    rb->root->color = BLACK;
 }
 
-int heightNodeRBTree(RBTree *root)
+int heightNodeRBTree(RBTree *rb, RBTreeNode *root)
 {
-    if (!root)
+    if (root == rb->nil)
         return -1;
-    int heightLeft = heightNodeRBTree(root->left);
-    int heightRight = heightNodeRBTree(root->right);
+    int heightLeft = heightNodeRBTree(rb, root->left);
+    int heightRight = heightNodeRBTree(rb, root->right);
     if (heightLeft > heightRight)
         return heightLeft + 1;
     return heightRight + 1;
