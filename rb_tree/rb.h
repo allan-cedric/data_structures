@@ -65,7 +65,7 @@ RBTreeNode *maxRBTree(RBTree *rb, RBTreeNode *root);
 // === Rotação para direita (Caso Esquerda-Esquerda) ===
 void LLRotationRBTree(RBTree *rb, RBTreeNode *node_x);
 
-// === Rotação para direita (Caso Direita-Direita) ===
+// === Rotação para esquerda (Caso Direita-Direita) ===
 void RRRotationRBTree(RBTree *rb, RBTreeNode *node_x);
 
 // === Insere um novo elemento em uma Red-Black Tree ===
@@ -76,5 +76,14 @@ void insertFixUpRBTree(RBTree *rb, RBTreeNode *new);
 
 // === Retorna a altura de um nodo em uma Red-Black Tree ===
 int heightNodeRBTree(RBTree *rb, RBTreeNode *root);
+
+// === Redireciona uma sub-árvore como filho de um novo nodo ===
+void transplantSubtreeRBTree(RBTree *rb, RBTreeNode *node_u, RBTreeNode *node_v);
+
+// === Deleta um elemento da Red-Black Tree ===
+void deleteRBTree(RBTree *rb, int key);
+
+// === Corrigi a Red-Black Tree após uma deleção ===
+void deleteFixUpRBTree(RBTree *rb, RBTreeNode *node_x);
 
 #endif

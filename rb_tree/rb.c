@@ -252,3 +252,129 @@ int heightNodeRBTree(RBTree *rb, RBTreeNode *root)
         return heightLeft + 1;
     return heightRight + 1;
 }
+
+void transplantSubtreeRBTree(RBTree *rb, RBTreeNode *node_u, RBTreeNode *node_v)
+{
+    if (node_u->parent == rb->nil)
+        rb->root = node_v;
+    else if (node_u == node_u->parent->left)
+        node_u->parent->left = node_v;
+    else
+        node_u->parent->right = node_v;
+    node_v->parent = node_u->parent;
+}
+
+void deleteRBTree(RBTree *rb, int key)
+{
+    RBTreeNode *node_z = searchRBTree(rb, rb->root, key);
+    if (node_z == rb->nil)
+        return;
+
+    RBTreeNode *node_y = node_z, *node_x;
+    rbtree_node_color node_y_origin_color = node_y->color;
+
+    if (node_z->left == rb->nil)
+    {
+        node_x = node_z->right;
+        transplantSubtreeRBTree(rb, node_z, node_z->right);
+    }
+    else if (node_z->right == rb->nil)
+    {
+        node_x = node_z->left;
+        transplantSubtreeRBTree(rb, node_z, node_z->left);
+    }
+    else
+    {
+        node_y = minRBTree(rb, node_z->right);
+        node_y_origin_color = node_y->color;
+        node_x = node_y->right;
+        if (node_y->parent == node_z)
+            node_x->parent = node_y;
+        else
+        {
+            transplantSubtreeRBTree(rb, node_y, node_y->right);
+            node_y->right = node_z->right;
+            node_y->right->parent = node_y;
+        }
+        transplantSubtreeRBTree(rb, node_z, node_y);
+        node_y->left = node_z->left;
+        node_y->left->parent = node_y;
+        node_y->color = node_z->color;
+    }
+    if (node_y_origin_color == BLACK)
+        deleteFixUpRBTree(rb, node_x);
+    free(node_z);
+}
+
+void deleteFixUpRBTree(RBTree *rb, RBTreeNode *node_x)
+{
+    RBTreeNode *node_w;
+    while ((node_x != rb->root) && (node_x->color == BLACK))
+    {
+        if (node_x == node_x->parent->left)
+        {
+            node_w = node_x->parent->right;
+            if (node_w->color == RED) // Case 1
+            {
+                node_w->color = BLACK;
+                node_x->parent->color = RED;
+                RRRotationRBTree(rb, node_x->parent);
+                node_w = node_x->parent->right;
+            }
+            if ((node_w->left->color == BLACK) && (node_w->right->color == BLACK)) // Case 2
+            {
+                node_w->color = RED;
+                node_x = node_x->parent;
+            }
+            else
+            {
+                if (node_w->right->color == BLACK) // Case 3
+                {
+                    node_w->left->color = BLACK;
+                    node_w->color = RED;
+                    LLRotationRBTree(rb, node_w);
+                    node_w = node_x->parent->right;
+                }
+                // Case 4
+                node_w->color = node_x->parent->color;
+                node_x->parent->color = BLACK;
+                node_w->right->color = BLACK;
+                RRRotationRBTree(rb, node_x->parent);
+                node_x = rb->root;
+            }
+        }
+        else
+        {
+            node_w = node_x->parent->left;
+            if (node_w->color == RED) // Case 1
+            {
+                node_w->color = BLACK;
+                node_x->parent->color = RED;
+                LLRotationRBTree(rb, node_x->parent);
+                node_w = node_x->parent->left;
+            }
+            if ((node_w->left->color == BLACK) && (node_w->right->color == BLACK)) // Case 2
+            {
+                node_w->color = RED;
+                node_x = node_x->parent;
+            }
+            else
+            {
+                if (node_w->left->color == BLACK) // Case 3
+                {
+                    node_w->left->color = BLACK;
+                    node_w->color = RED;
+                    RRRotationRBTree(rb, node_w);
+                    node_w = node_x->parent->left;
+                }
+                // Case 4
+                node_w->color = node_x->parent->color;
+                node_x->parent->color = BLACK;
+                node_w->left->color = BLACK;
+                LLRotationRBTree(rb, node_x->parent);
+                node_x = rb->root;
+            }
+        }
+    }
+    node_x->color = BLACK;
+}
