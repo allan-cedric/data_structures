@@ -24,8 +24,8 @@ int main()
 {
     ...
 
-    RBTree *rootRBTree = createRBTree(); # Instância de uma árvore.
-
+    RBTree rb_tree; # Instância de uma árvore.
+    createRBTree(&rb_tree);  # Inicializa a árvore.
     ...
     return 0;
 }
