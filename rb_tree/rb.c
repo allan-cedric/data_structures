@@ -49,21 +49,21 @@ void printRBTree(RBTree *root, const char *op)
     {
         if (!strcmp(op, "pre"))
         {
-            printf("%i ", root->key);
+            printf("(%i, %c)", root->key, root->color == RED ? 'R' : 'B');
             printRBTree(root->left, op);
             printRBTree(root->right, op);
         }
         else if (!strcmp(op, "in"))
         {
             printRBTree(root->left, op);
-            printf("%i ", root->key);
+            printf("(%i, %c)", root->key, root->color == RED ? 'R' : 'B');
             printRBTree(root->right, op);
         }
         else if (!strcmp(op, "pos"))
         {
             printRBTree(root->left, op);
             printRBTree(root->right, op);
-            printf("%i ", root->key);
+            printf("(%i, %c)", root->key, root->color == RED ? 'R' : 'B');
         }
         else
             fprintf(stderr, "Invalid option to print a Red-Black Tree!\n");
@@ -140,4 +140,93 @@ RBTree *RRRotationRBTree(RBTree *root, RBTree *node_x)
     node_x->parent = node_y;
 
     return root;
+}
+
+RBTree *insertRBTree(RBTree *root, int key)
+{
+    RBTree *node_y = NULL, *node_x = root;
+    while (node_x)
+    {
+        node_y = node_x;
+        if (key == node_x->key)
+            return root;
+        node_x = (key < node_x->key ? node_x->left : node_x->right);
+    }
+    RBTree *new = newNode(key);
+    new->parent = node_y;
+    if (!node_y)
+        root = new;
+    else if (key < node_y->key)
+        node_y->left = new;
+    else
+        node_y->right = new;
+
+    return insertFixUpRBTree(root, new);
+}
+
+RBTree *insertFixUpRBTree(RBTree *root, RBTree *new)
+{
+    while (new->parent && new->parent->color == RED)
+    {
+        if (new->parent == new->parent->parent->left)
+        {
+            RBTree *node_y = new->parent->parent->right;
+            if (node_y && node_y->color == RED) // Case 1
+            {
+                new->parent->color = BLACK;
+                node_y->color = BLACK;
+                new->parent->parent->color = RED;
+                new = new->parent->parent;
+            }
+            else
+            {
+                if (new == new->parent->right) // Case 2
+                {
+                    new = new->parent;
+                    root = RRRotationRBTree(root, new);
+                }
+                // Case 3
+                new->parent->color = BLACK;
+                new->parent->parent->color = RED;
+                root = LLRotationRBTree(root, new->parent->parent);
+            }
+        }
+        else
+        {
+            RBTree *node_y = new->parent->parent->left;
+            if (node_y && node_y->color == RED) // Case 1
+            {
+                new->parent->color = BLACK;
+                node_y->color = BLACK;
+                new->parent->parent->color = RED;
+                new = new->parent->parent;
+            }
+            else
+            {
+                if (new == new->parent->left) // Case 2
+                {
+                    new = new->parent;
+                    root = LLRotationRBTree(root, new);
+                }
+                // Case 3
+                new->parent->color = BLACK;
+                new->parent->parent->color = RED;
+                root = RRRotationRBTree(root, new->parent->parent);
+            }
+        }
+    }
+
+    root->color = BLACK;
+    return root;
+}
+
+int heightNodeRBTree(RBTree *root)
+{
+    if (!root)
+        return -1;
+    int heightLeft = heightNodeRBTree(root->left);
+    int heightRight = heightNodeRBTree(root->right);
+    if (heightLeft > heightRight)
+        return heightLeft + 1;
+    return heightRight + 1;
 }

@@ -56,4 +56,13 @@ RBTree *LLRotationRBTree(RBTree *root, RBTree *node_x);
 // === Rotação para direita (Caso Direita-Direita) ===
 RBTree *RRRotationRBTree(RBTree *root, RBTree *node_x);
 
+// === Insere um novo elemento em uma Red-Black Tree ===
+RBTree *insertRBTree(RBTree *root, int key);
+
+// === Corrigi a Red-Black Tree após uma inserção ===
+RBTree *insertFixUpRBTree(RBTree *root, RBTree *new);
+
+// === Retorna a altura de um nodo em uma Red-Black Tree ===
+int heightNodeRBTree(RBTree *root);
+
 #endif
