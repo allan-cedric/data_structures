@@ -166,7 +166,7 @@ RBTree *insertRBTree(RBTree *root, int key)
 
 RBTree *insertFixUpRBTree(RBTree *root, RBTree *new)
 {
-    while (new->parent &&new->parent->color == RED)
+    while (new->parent && new->parent->color == RED)
     {
         if (new->parent == new->parent->parent->left)
         {
