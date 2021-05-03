@@ -22,7 +22,7 @@
  
 - [x] `Árvore AVL (AVL Tree)`
 
-- [ ] `Árvore Rubro-Negra (Red-Black Tree)`
+- [x] `Árvore Rubro-Negra (Red-Black Tree)`
 
 ## Projetos futuros
 
