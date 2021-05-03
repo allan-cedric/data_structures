@@ -15,7 +15,7 @@ make
 ./test_rb
 ```
 
-## Como usar a biblioteca ? #TODO
+## Como usar a biblioteca ?
 
 ```C
 #include "rb.h"
@@ -31,7 +31,7 @@ int main()
 }
 ```
 
-## Principais operações implementadas #TODO
+## Principais operações implementadas
 
 *   Inserção / Busca / Remoção
 
